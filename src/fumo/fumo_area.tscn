@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3 uid="uid://f343gg8fmd45"]
+
+[ext_resource type="Script" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
+[ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_fbnjf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
+size = Vector2(137, 188)
+
+[node name="FumoArea" type="Area2D"]
+position = Vector2(430, 363)
+script = ExtResource("1_plwnl")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_fbnjf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5.5, 6)
+shape = SubResource("RectangleShape2D_yn2xv")
+
+[node name="Fumo" type="Node" parent="."]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -24.0
+offset_top = -137.0
+offset_right = 16.0
+offset_bottom = -97.0
+
+[node name="TextureRect" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.0
+offset_top = -167.0
+offset_right = 167.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NameLabel" type="Label" parent="Control/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 145.0
+offset_top = 4.0
+offset_right = 191.0
+offset_bottom = 27.0
+text = "Game"
+
+[node name="CostLabel" type="Label" parent="Control/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 291.0
+offset_top = 3.0
+offset_right = 337.0
+offset_bottom = 26.0
+text = "Game"
+
+[node name="HoverIcon" type="TextureRect" parent="Control/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.1, 0.1)
+
+[node name="TriggerLabel" type="Label" parent="Control/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 136.0
+offset_top = 40.0
+offset_right = 197.0
+offset_bottom = 63.0
+text = "On Buy:"
+
+[node name="AbilityLabel" type="Label" parent="Control/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 13.0
+offset_top = 71.0
+offset_right = 327.0
+offset_bottom = 120.0
+text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+autowrap_mode = 2
+
+[node name="SpellLabel" type="Label" parent="Control/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 15.0
+offset_top = 141.0
+offset_right = 329.0
+offset_bottom = 190.0
+text = "気:"
+autowrap_mode = 2
