@@ -17,8 +17,13 @@ var feinted_opponents:Array[Fumo] = []
 
 func _ready() -> void:
 	pass
-	# attach scripts
-	
+
+
+func _generate_team(fumo_team):	
+	for i in range(6):	
+		var random_fumo: = FumoFactory.FUMOS.pick_random()
+		fumo_team.append(FumoFactory.make_fumo(random_fumo))	
+	pass
 
 func _play_turn() -> void:
 
