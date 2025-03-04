@@ -7,7 +7,6 @@ class_name Fumo
 const MAX_HP:int = 99
 const MAX_ATK:int = 99
 
-
 var id:int
 var name_str:String
 var ability_desc:String
@@ -46,7 +45,8 @@ var atk:int:
 	get:
 		return atk
 
-
+func _to_string() -> String:
+	return name_str+"|"+str(hp)+"|"+str(atk)+"|"+str(mp)+"/"+str(max_mp)
 
 
 

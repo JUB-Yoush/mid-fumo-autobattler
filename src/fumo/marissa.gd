@@ -1,5 +1,5 @@
 extends Fumo
-#class_name Marissa 
+class_name Marissa 
 #extends Node
 
 func _init():

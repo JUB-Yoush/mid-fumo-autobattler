@@ -5,7 +5,7 @@ var allies:Array[Fumo]
 var feinted_allies:Array[Fumo] = []
 var opponents:Array[Fumo]
 var feinted_opponents:Array[Fumo] = []
-
+var turn_count: = 0
 # signal turn_started
 # signal turn_ended
 # signal ally_feinted
@@ -16,27 +16,30 @@ var feinted_opponents:Array[Fumo] = []
 
 
 func _ready() -> void:
+	allies = _generate_team()
+	opponents = _generate_team()
 	pass
 
 
-func _generate_team(fumo_team):	
+func _generate_team() -> Array[Fumo]:
+	var team = []
 	for i in range(6):	
-		var random_fumo: = FumoFactory.FUMOS.pick_random()
-		fumo_team.append(FumoFactory.make_fumo(random_fumo))	
-	pass
+		var random_fumo:String = FumoFactory.FUMOS.pick_random()
+		team.append(FumoFactory.make_fumo(random_fumo))	
+	return team
 
 func _play_turn() -> void:
-
-	while allies.size() != 0 or opponents.size() !=  0:
-		var front_ally:Fumo = allies[0]
-		var front_opp:Fumo = allies[0]
-		#animate them smashing into each other.
-		_fight(front_ally,front_opp)
-		if front_ally.hp == 0:
-			front_ally =_swap_fumo(allies)
-		if front_opp.hp == 0:
-			front_opp = _swap_fumo(allies)
-
+	_print_status()
+	#smthn turn based
+	var front_ally:Fumo = allies[0]
+	var front_opp:Fumo = allies[0]
+	#animate them smashing into each other.
+	_fight(front_ally,front_opp)
+	if front_ally.hp == 0:
+		front_ally =_swap_fumo(allies)
+	if front_opp.hp == 0:
+		front_opp = _swap_fumo(opponents)
+	turn_count += 1
 
 func _fight(ally:Fumo,opponent:Fumo) -> void:
 	#smash each other
@@ -68,4 +71,18 @@ func _swap_fumo(fumo_team:Array[Fumo]) -> Fumo:
 	return null
 	
 	
-	
+
+#debug
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("advance_turn"):
+		_play_turn()
+
+func _print_status() -> void:
+	print("---TURN:" + str(turn_count))
+	print("---ALLIES---")
+	for ally in allies:
+		print(ally._to_string())
+	print("---OPPONENTS---")
+	for opp in opponents:
+		print(opp._to_string())
+

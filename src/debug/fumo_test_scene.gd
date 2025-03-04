@@ -1,6 +1,5 @@
 extends Node2D
 
 func _ready():
-	var testFumo = FumoFactory.make_fumo("marissa")
+	var testFumo:FumoArea = FumoFactory.make_fumo_area("marissa")
 	add_child(testFumo)
-
