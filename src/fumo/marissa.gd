@@ -2,7 +2,7 @@ extends Fumo
 class_name Marissa 
 #extends Node
 
-func _init():
+func _init() -> void:
 	id = 001
 	name_str = "Marissa"
 	price = 3

@@ -34,15 +34,15 @@ const FUMOS: Array[String] = [
 const fumoAreaScene = preload("res://src/fumo/fumo_area.tscn")
 
 
-static func make_fumo_area(fumo_name) -> FumoArea:
-	var fumo_data = load("res://src/fumo/" + fumo_name + ".gd")
+static func make_fumo_area(fumo_name:String) -> FumoArea:
+	var fumo_data:Script = load("res://src/fumo/" + fumo_name + ".gd")
 	var fumoArea:FumoArea = fumoAreaScene.instantiate()	
 	fumoArea.fumo = Fumo.new()
 	fumoArea.fumo.set_script(fumo_data)
 	return fumoArea
 
-static func make_fumo(fumo_name) -> Fumo:
-	var fumo_data = load("res://src/fumo/" + fumo_name + ".gd")
+static func make_fumo(fumo_name:String) -> Fumo:
+	var fumo_data:Script = load("res://src/fumo/" + fumo_name + ".gd")
 	var fumoArea:FumoArea = fumoAreaScene.instantiate()	
 	fumoArea.fumo = Fumo.new()
 	fumoArea.fumo.set_script(fumo_data)

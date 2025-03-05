@@ -1,7 +1,7 @@
 extends Node2D
 class_name Combat
 
-var allies:Array[Fumo]
+var allies:Array[Fumo] = []
 var feinted_allies:Array[Fumo] = []
 var opponents:Array[Fumo]
 var feinted_opponents:Array[Fumo] = []
@@ -22,7 +22,7 @@ func _ready() -> void:
 
 
 func _generate_team() -> Array[Fumo]:
-	var team = []
+	var team :Array[Fumo] = []
 	for i in range(6):	
 		var random_fumo:String = FumoFactory.FUMOS.pick_random()
 		team.append(FumoFactory.make_fumo(random_fumo))	
@@ -36,10 +36,13 @@ func _play_turn() -> void:
 	#animate them smashing into each other.
 	_fight(front_ally,front_opp)
 	if front_ally.hp == 0:
+		print(front_ally.name_str + " was KO'ed")
 		front_ally =_swap_fumo(allies)
 	if front_opp.hp == 0:
+		print(front_ally.name_str + " was KO'ed")
 		front_opp = _swap_fumo(opponents)
 	turn_count += 1
+	print("Turn Over")
 
 func _fight(ally:Fumo,opponent:Fumo) -> void:
 	#smash each other
@@ -78,11 +81,10 @@ func _input(event: InputEvent) -> void:
 		_play_turn()
 
 func _print_status() -> void:
-	print("---TURN:" + str(turn_count))
-	print("---ALLIES---")
-	for ally in allies:
-		print(ally._to_string())
-	print("---OPPONENTS---")
-	for opp in opponents:
-		print(opp._to_string())
-
+	print("---TURN:" + str(turn_count) + "---")
+	print("ALLIES:")
+	for i in range(allies.size()):
+		print(str(i) + ": "+allies[i]._to_string())
+	print("OPPONENTS:")
+	for i in range(opponents.size()):
+		print(str(i) + ": "+allies[i]._to_string())

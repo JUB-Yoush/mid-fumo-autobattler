@@ -6,7 +6,7 @@
 script = ExtResource("1_ekbu2")
 
 [node name="Party" type="Node2D" parent="."]
-position = Vector2(493, 309)
+position = Vector2(654, 400)
 
 [node name="Opponents" type="Node2D" parent="."]
-position = Vector2(753, 306)
+position = Vector2(1340, 384)
