@@ -30,9 +30,10 @@ enum RESULTS {
 
 var current_combat_state:COMBAT_STATE = COMBAT_STATE.STARTING
 
-var priority_sort:Callable = func(ally:Fumo,opp:Fumo) -> bool:
+var priority_sort:Callable = func(ally:Array,opp:Array) -> bool:
+	# make a lua list
+	return ally[1].atk > opp[1].atk
 
-	return ally.atk > opp.atk
 func _ready() -> void:
 	allies = _generate_team()
 	opponents = _generate_team()
@@ -52,7 +53,7 @@ func _start_round() -> void:
 	current_combat_state = COMBAT_STATE.FIGHTING
 	var ally_start_abilities :Array = _play_abilities("on_round_start",allies)
 
-func _play_abilities(ability_query:StringName,team:Array[Fumo]) -> Array[Fumo]:
+func _play_abilities(ability_query:StringName,team:Array[Fumo]) -> Array:
 	var ability_fumos :Array = []
 	for fumo:Fumo in team:
 		if fumo.has_method(ability_query):
