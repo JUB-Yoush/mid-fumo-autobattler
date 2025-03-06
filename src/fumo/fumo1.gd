@@ -1,4 +1,4 @@
-extends Node
+extends Object
 class_name Fumo
 
 # signal feinted
@@ -49,4 +49,5 @@ func _to_string() -> String:
 	return name_str+"|"+str(hp)+"|"+str(atk)+"|"+str(mp)+"/"+str(max_mp)
 
 
-
+# signal feinted
+# signal spell_ready

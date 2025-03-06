@@ -29,6 +29,7 @@ extends Node
 #
 const FUMOS: Array[String] = [
 	"marissa",
+	"reimu",
 ]
 
 const fumoAreaScene = preload("res://src/fumo/fumo_area.tscn")
