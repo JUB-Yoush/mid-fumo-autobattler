@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://f343gg8fmd45"]
 
-[ext_resource type="Script" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
+[ext_resource type="Script" uid="uid://2noserkm62p1" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
 [ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_fbnjf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
