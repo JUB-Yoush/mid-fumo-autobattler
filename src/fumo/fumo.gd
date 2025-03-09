@@ -20,11 +20,13 @@ var in_party:bool
 var is_temp:bool
 var in_shop:bool
 var dead:bool
+var team_id :Combat.TEAM
 
 
 var hp:int:
 	set(value):
 		hp = clamp(value,0,MAX_HP)
+		print("%s hp set to %d" % [name_str, hp])
 		if hp == 0:
 			koed.emit(self)
 	get:
@@ -32,13 +34,13 @@ var hp:int:
 			
 
 var max_mp:int
-var mp:int:
+var mp:int = 0:
 	set(value):
 		mp = clamp(value,0,max_mp)
 		if mp == max_mp:
 			pass
 	get:
-		return hp
+		return mp
 
 var atk:int:
 	set(value):
@@ -47,8 +49,5 @@ var atk:int:
 		return atk
 
 func _to_string() -> String:
-	return name_str+"|"+str(hp)+"|"+str(atk)+"|"+str(mp)+"/"+str(max_mp)
+	return "%s|hp:%d|atk:%d|mp:%d/%d" % [name_str, hp, atk, mp, max_mp]
 
-
-# signal feinted
-# signal spell_ready

@@ -2,7 +2,7 @@ extends Node2D
 class_name Combat
 
 var allies:Array[Fumo] = []
-var feinted_allies:Array[Fumo] = []
+var gravyeard:Array[Fumo] = []
 var opponents:Array[Fumo]
 var feinted_opponents:Array[Fumo] = []
 var turn_count: = 0
@@ -15,6 +15,26 @@ var turn_count: = 0
 # signal fumo_summoned
 
 var ability_queue:Array[AbilityCall]
+var spell_queue:Array[AbilityCall]
+
+const SEED_RANGE := 256
+
+enum TEAM {
+ALLIES,
+OPPONENTS,
+}
+
+var team_map := {
+TEAM.ALLIES: allies,
+TEAM.OPPONENTS: opponents,
+}
+
+var graveyard_map := {
+TEAM.ALLIES: gravyeard,
+TEAM.OPPONENTS: feinted_opponents,
+}
+
+const TEAM_MAX := 6
 
 enum COMBAT_STATE {
 	STARTING,
@@ -22,7 +42,7 @@ enum COMBAT_STATE {
 	ENDED,
 	}
 
-
+var seed_value:int
 
 enum RESULTS {
 	WIN,
@@ -36,21 +56,39 @@ var priority_sort:Callable = func(a1:AbilityCall,a2:AbilityCall) -> bool:
 	return a1.fumo.atk > a2.fumo.atk
 
 func _ready() -> void:
-	allies = _generate_team()
-	opponents = _generate_team()
+	# allies = _generate_team()
+	# opponents = _generate_team()
+	allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
+	opponents = _create_team(['sumireko','sumireko','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
+	_generate_seed()
 	_start_round()
 	pass
 
+func _generate_seed() -> void:
+	seed_value = randi_range(-SEED_RANGE, SEED_RANGE)
+	print("Seed is %d" % seed_value)
+	seed(seed_value)
+	
 
-
-func _generate_team() -> Array[Fumo]:
+func _rng_team(team_id:TEAM) -> Array[Fumo]:
 	var team :Array[Fumo] = []
-	for i in range(6):	
+	for i in range(TEAM_MAX):
 		var random_fumo:String = FumoFactory.FUMOS.pick_random()
-		var fumo := FumoFactory.make_fumo(random_fumo)
-		fumo.koed.connect(_on_fumo_ko)
-		team.append(fumo)	
+		team.append(_make_fumo(random_fumo,team_id))
 	return team
+
+func _create_team(team_array:Array[String],team_id:TEAM) -> Array[Fumo]:
+	var team :Array[Fumo] = []
+	for fumo_str in team_array:
+		team.append(_make_fumo(fumo_str,team_id))
+	return team
+
+func _make_fumo(fumo_str:String,team_id:TEAM) -> Fumo:
+	var fumo := FumoFactory.make_fumo(fumo_str)
+	fumo.team_id = team_id
+	fumo.koed.connect(_on_fumo_ko)
+	return fumo
+
 
 func _on_fumo_ko(fumo:Fumo) -> void:
 	print(fumo.name_str + " was KO'ed")
@@ -60,8 +98,10 @@ func _on_fumo_ko(fumo:Fumo) -> void:
 		ability_call.fumo = fumo
 		ability_call.ability = "on_ko"
 		ability_queue.push_front(ability_call)
+	_swap_fumo(fumo)
 
 func _start_round() -> void:
+	_print_status()
 	current_combat_state = COMBAT_STATE.FIGHTING
 	var start_abilities :Array[AbilityCall] = _get_abilities("on_round_start",allies + opponents)
 	ability_queue += start_abilities
@@ -101,22 +141,28 @@ func _play_turn() -> void:
 	_fight(front_ally,front_opp)
 
 	if front_ally.hp == 0:
-		feinted_allies.append(allies.pop_front())
+		gravyeard.append(allies.pop_front())
 		#print(front_ally.name_str + " was KO'ed")
 		if allies.size() < 0:
-			front_ally =_swap_fumo(allies)
+			front_ally =_swap_fumo(allies[0])
 
 	if front_opp.hp == 0:
 		feinted_opponents.append(opponents.pop_front())
 		#print(front_opp.name_str + " was KO'ed")
 		if opponents.size() < 0:
-			front_opp = _swap_fumo(opponents)
+			front_opp = _swap_fumo(opponents[0])
+
 	if (allies.size() == 0 or opponents.size() == 0):
 		round_over()
 	turn_count += 1
 	print("Turn Over")
 
-func _fight(ally:Fumo,opponent:Fumo) -> void:
+func summon_fumo(fumo:Fumo) -> void:
+	var team:Array[Fumo] = team_map[fumo.team_id]
+	if team.size() < TEAM_MAX:
+		team.push_front(fumo)
+
+static func _fight(ally:Fumo,opponent:Fumo) -> void:
 	#smash each other
 	ally.hp -= _calculate_damage(opponent)
 	opponent.hp -= _calculate_damage(ally)
@@ -129,14 +175,13 @@ static func deal_damage(fumo:Fumo,damage:int) -> void:
 	fumo.hp -= damage
 	pass
 
-func _swap_fumo(fumo_team:Array[Fumo]) -> Fumo:
-	if fumo_team == allies:
-		return fumo_team[0]
+func _swap_fumo(fumo:Fumo) -> Fumo:
+	var team :Array[Fumo]= team_map[fumo.team_id]
+	var graveyard:Array[Fumo] = graveyard_map[fumo.team_id]
+	graveyard.append(fumo)
+	team.erase(fumo)
+	return team[0]
 
-	elif fumo_team == opponents:
-		feinted_opponents.append(opponents.pop_front())
-		return fumo_team[0]
-	return null
 	
 func round_over() -> RESULTS:
 	current_combat_state = COMBAT_STATE.ENDED
@@ -161,7 +206,7 @@ func _input(event: InputEvent) -> void:
 
 func _print_status() -> void:
 	print("---TURN:" + str(turn_count) + "---")
-	print("ability-queue")
+	print("ABILITY_QUEUE")
 	print(ability_queue)
 	print("ALLIES:")
 	for i in range(allies.size()):
