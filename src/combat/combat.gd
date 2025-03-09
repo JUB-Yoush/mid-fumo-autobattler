@@ -29,6 +29,11 @@ TEAM.ALLIES: allies,
 TEAM.OPPONENTS: opponents,
 }
 
+var opposing_team :={
+TEAM.ALLIES: TEAM.OPPONENTS,
+TEAM.OPPONENTS: TEAM.ALLIES,
+}
+
 var graveyard_map := {
 TEAM.ALLIES: gravyeard,
 TEAM.OPPONENTS: feinted_opponents,
@@ -120,7 +125,8 @@ func _get_abilities(ability_query:StringName,team:Array[Fumo]) -> Array:
 	
 func _play_ability(ability_call:AbilityCall) -> void:
 	print(ability_call.fumo.name_str + " uses ability: " + ability_call.ability)
-	ability_call.fumo.call(ability_call.ability,allies,opponents)
+	var fumo := ability_call.fumo	
+	ability_call.fumo.call(ability_call.ability,team_map[fumo.team_id],team_map[opposing_team[fumo.team_id]])
 	
 func _remove_queued_abilities(fumo:Fumo) -> void:
 	for ability in ability_queue:
