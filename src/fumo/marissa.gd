@@ -14,11 +14,9 @@ func _init() -> void:
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/Marissa.png")
 
-# var on_round_start:Callable = func(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
-# 	print("from fumo: " + name_str)
 
-func on_round_start(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
+func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
 
-func on_ko(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
+func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("death ability!!! curse of the pharoh!!!" + name_str)

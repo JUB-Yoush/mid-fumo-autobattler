@@ -130,8 +130,6 @@ static func deal_damage(fumo:Fumo,damage:int) -> void:
 	pass
 
 func _swap_fumo(fumo_team:Array[Fumo]) -> Fumo:
-	# we also need to check for draw cases
-	# bad func
 	if fumo_team == allies:
 		return fumo_team[0]
 
