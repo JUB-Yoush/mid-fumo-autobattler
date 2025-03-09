@@ -1,7 +1,7 @@
-extends Object
+extends RefCounted
 class_name Fumo
 
-# signal feinted
+signal koed(fumo:Fumo)
 # signal spell_ready
 
 const MAX_HP:int = 99
@@ -19,13 +19,14 @@ var tier:int
 var in_party:bool
 var is_temp:bool
 var in_shop:bool
+var dead:bool
 
 
 var hp:int:
 	set(value):
 		hp = clamp(value,0,MAX_HP)
 		if hp == 0:
-			pass
+			koed.emit(self)
 	get:
 		return hp
 			

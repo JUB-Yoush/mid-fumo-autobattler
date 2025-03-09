@@ -20,3 +20,5 @@ func _init() -> void:
 func on_round_start(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
 
+func on_ko(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
+	print("death ability!!! curse of the pharoh!!!" + name_str)

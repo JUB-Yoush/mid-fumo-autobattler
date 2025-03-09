@@ -15,6 +15,7 @@ func _init() -> void:
 	image = load("res://assets/fumo/Reimu.png")
 
 
-func on_round_start(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
-	print("from fumo: " + name_str)
+func on_round_start(_allies:Array[Fumo], opponents: Array[Fumo]) -> void:
+	print("this Reimu KILLS the poor sod at the front of the opposition")
+	Combat.deal_damage(opponents[0], 99)
 
