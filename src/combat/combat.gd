@@ -60,11 +60,18 @@ var current_combat_state:COMBAT_STATE = COMBAT_STATE.STARTING
 var priority_sort:Callable = func(a1:AbilityCall,a2:AbilityCall) -> bool:
 	return a1.fumo.atk > a2.fumo.atk
 
+func get_team(team_id:TEAM) -> Array[Fumo]:
+	if team_id == TEAM.ALLIES:
+		return allies
+	else:
+		return opponents
+	
+
 func _ready() -> void:
 	# allies = _generate_team()
 	# opponents = _generate_team()
 	allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
-	opponents = _create_team(['sumireko','sumireko','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
+	opponents = _create_team(['sumireko','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
 	_generate_seed()
 	_start_round()
 	pass
@@ -103,7 +110,14 @@ func _on_fumo_ko(fumo:Fumo) -> void:
 		ability_call.fumo = fumo
 		ability_call.ability = "on_ko"
 		ability_queue.push_front(ability_call)
+
 	_swap_fumo(fumo)
+
+	var team := get_team(fumo.team_id)
+	var ally_abilities := _get_abilities("on_ally_ko",team)
+	ally_abilities.sort_custom(priority_sort)
+	ally_abilities.append_array(ability_queue)
+	ability_queue = ally_abilities
 
 func _start_round() -> void:
 	_print_status()
@@ -124,21 +138,32 @@ func _get_abilities(ability_query:StringName,team:Array[Fumo]) -> Array:
 	return ability_calls
 	
 func _play_ability(ability_call:AbilityCall) -> void:
-	print(ability_call.fumo.name_str + " uses ability: " + ability_call.ability)
 	var fumo := ability_call.fumo	
-	ability_call.fumo.call(ability_call.ability,team_map[fumo.team_id],team_map[opposing_team[fumo.team_id]])
-	
+	print(ability_call.fumo.name_str + " uses ability: " + ability_call.ability)
+	#ability_call.fumo.call(ability_call.ability,team_map[fumo.team_id],team_map[opposing_team[fumo.team_id]])
+	ability_call.fumo.call(ability_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
+
+func append_abilities(queue:Array[AbilityCall]) -> Array[AbilityCall]:
+	queue.append_array(ability_queue)
+	ability_queue = queue
+	return ability_queue
+
 func _remove_queued_abilities(fumo:Fumo) -> void:
 	for ability in ability_queue:
 		if ability.fumo == fumo:
 			ability_queue.erase(ability)
-
 
 func _play_turn() -> void:
 	_print_status()
 	if ability_queue.size() > 0:
 		_play_ability(ability_queue.pop_front())
 		return
+	
+	var all_turn_abilities := _get_abilities("on_turn_start",allies)
+	var opp_turn_abilities := _get_abilities("on_turn_start",opponents)
+	all_turn_abilities.append_array(opp_turn_abilities)
+	all_turn_abilities.sort_custom(priority_sort)
+	append_abilities(all_turn_abilities)
 
 	#smthn turn based
 	var front_ally:Fumo = allies[0]
@@ -164,7 +189,7 @@ func _play_turn() -> void:
 	print("Turn Over")
 
 func summon_fumo(fumo:Fumo) -> void:
-	var team:Array[Fumo] = team_map[fumo.team_id]
+	var team:Array[Fumo] = get_team(fumo.team_id)
 	if team.size() < TEAM_MAX:
 		team.push_front(fumo)
 
@@ -182,7 +207,7 @@ static func deal_damage(fumo:Fumo,damage:int) -> void:
 	pass
 
 func _swap_fumo(fumo:Fumo) -> Fumo:
-	var team :Array[Fumo]= team_map[fumo.team_id]
+	var team :Array[Fumo]= get_team(fumo.team_id)
 	var graveyard:Array[Fumo] = graveyard_map[fumo.team_id]
 	graveyard.append(fumo)
 	team.erase(fumo)

@@ -28,13 +28,13 @@ extends Node
 # }
 #
 const FUMOS: Array[String] = [
-	#"marissa",
+	"marissa",
 	"reimu",
 	"sumireko",
+	"sakuya",
 ]
 
 const fumoAreaScene = preload("res://src/fumo/fumo_area.tscn")
-
 
 static func make_fumo_area(fumo_name:String) -> FumoArea:
 	var fumo_data:Script = load("res://src/fumo/" + fumo_name + ".gd")
