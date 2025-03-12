@@ -16,5 +16,6 @@ func _init() -> void:
 
 
 func on_ally_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
-	print("Rest in fumo...")
+	var sakuya := FumoFactory.make_fumo("sakuya")
+	allies.append
 

@@ -188,10 +188,11 @@ func _play_turn() -> void:
 	turn_count += 1
 	print("Turn Over")
 
-func summon_fumo(fumo:Fumo) -> void:
+func summon_fumo(fumo:Fumo) -> Array[Fumo]:
 	var team:Array[Fumo] = get_team(fumo.team_id)
 	if team.size() < TEAM_MAX:
 		team.push_front(fumo)
+	return team
 
 static func _fight(ally:Fumo,opponent:Fumo) -> void:
 	#smash each other
