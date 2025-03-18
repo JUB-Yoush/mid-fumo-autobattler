@@ -1,5 +1,4 @@
 extends Fumo
-class_name Marissa 
 
 func _init() -> void:
 	id = 001
@@ -17,4 +16,3 @@ func _init() -> void:
 
 func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
-

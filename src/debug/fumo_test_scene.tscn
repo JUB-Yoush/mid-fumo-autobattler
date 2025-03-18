@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://c0y0bgqhgbdfa" path="res://src/debug/fumo_test_scene.gd" id="1_svncm"]
 
 [node name="FumoTestScene" type="Node2D"]
+visible = false
 script = ExtResource("1_svncm")

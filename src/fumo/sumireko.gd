@@ -1,5 +1,4 @@
 extends Fumo
-class_name Sumireko
 
 func _init() -> void:
 	id = 003

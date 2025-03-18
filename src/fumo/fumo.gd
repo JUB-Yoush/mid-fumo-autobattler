@@ -2,6 +2,8 @@ extends RefCounted
 class_name Fumo
 
 signal koed(fumo:Fumo)
+signal summoned_fumo(fumo:Fumo)
+signal action_completed
 # signal spell_ready
 
 const MAX_HP:int = 99

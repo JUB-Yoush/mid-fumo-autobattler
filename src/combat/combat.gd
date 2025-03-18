@@ -71,7 +71,7 @@ func _ready() -> void:
 	# allies = _generate_team()
 	# opponents = _generate_team()
 	allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
-	opponents = _create_team(['sumireko','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
+	opponents = _create_team(['kasen','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
 	_generate_seed()
 	_start_round()
 	pass
@@ -99,6 +99,7 @@ func _make_fumo(fumo_str:String,team_id:TEAM) -> Fumo:
 	var fumo := FumoFactory.make_fumo(fumo_str)
 	fumo.team_id = team_id
 	fumo.koed.connect(_on_fumo_ko)
+	fumo.summoned_fumo.connect(_summon_fumo)
 	return fumo
 
 
@@ -148,6 +149,11 @@ func append_abilities(queue:Array[AbilityCall]) -> Array[AbilityCall]:
 	ability_queue = queue
 	return ability_queue
 
+func append_ability(queue:Array[AbilityCall]) -> Array[AbilityCall]:
+	queue.append_array(ability_queue)
+	ability_queue = queue
+	return ability_queue
+
 func _remove_queued_abilities(fumo:Fumo) -> void:
 	for ability in ability_queue:
 		if ability.fumo == fumo:
@@ -188,7 +194,13 @@ func _play_turn() -> void:
 	turn_count += 1
 	print("Turn Over")
 
-func summon_fumo(fumo:Fumo) -> Array[Fumo]:
+func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
+	fumo.team_id = team_id
+	team_map[team_id] = _add_to_team(fumo)
+	ability_queue 
+	pass
+
+func _add_to_team(fumo:Fumo) -> Array[Fumo]:
 	var team:Array[Fumo] = get_team(fumo.team_id)
 	if team.size() < TEAM_MAX:
 		team.push_front(fumo)

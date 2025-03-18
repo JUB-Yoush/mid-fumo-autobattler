@@ -1,5 +1,4 @@
 extends Fumo
-class_name Reimu
 #extends Node
 
 func _init() -> void:
