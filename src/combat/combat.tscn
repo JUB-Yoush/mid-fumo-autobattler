@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://bcbe6pv56l6dr"]
 
-[ext_resource type="Script" uid="uid://dr5byjfxnkuiw" path="res://src/combat/combat.gd" id="1_ekbu2"]
+[ext_resource type="Script" uid="uid://dfyriv8pfx2um" path="res://src/combat/combat.gd" id="1_ekbu2"]
 
-[node name="Combat" type="Node2D"]
+[node name="Combat" type="Node"]
 script = ExtResource("1_ekbu2")
 
 [node name="Party" type="Node2D" parent="."]

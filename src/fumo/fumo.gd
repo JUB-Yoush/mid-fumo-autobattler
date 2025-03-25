@@ -22,7 +22,7 @@ var in_party:bool
 var is_temp:bool
 var in_shop:bool
 var dead:bool
-var team_id :Combat.TEAM
+var team_id :CombatData.TEAM
 
 
 var hp:int:
@@ -52,4 +52,3 @@ var atk:int:
 
 func _to_string() -> String:
 	return "%s|hp:%d|atk:%d|mp:%d/%d" % [name_str, hp, atk, mp, max_mp]
-
