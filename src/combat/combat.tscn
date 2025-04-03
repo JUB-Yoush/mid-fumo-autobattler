@@ -5,8 +5,6 @@
 [node name="Combat" type="Node"]
 script = ExtResource("1_ekbu2")
 
-[node name="Party" type="Node2D" parent="."]
-position = Vector2(654, 400)
+[node name="Allies" type="Node2D" parent="."]
 
 [node name="Opponents" type="Node2D" parent="."]
-position = Vector2(1340, 384)

@@ -2,6 +2,8 @@ extends Area2D
 class_name FumoArea
 
 var fumo:Fumo
+@onready var ui:Control = $UI
+@onready var animPlayer:AnimationPlayer = $AnimationPlayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,6 +14,8 @@ func _ready() -> void:
 	%TriggerLabel.text = fumo.trigger_desc
 	%AbilityLabel.text = fumo.ability_desc
 	%SpellLabel.text = fumo.spell_card_desc
+	ui.visible = false
+	
 
 func _set_fumo(new_fumo:Fumo) -> void:
 	fumo = new_fumo

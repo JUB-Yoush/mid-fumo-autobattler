@@ -28,11 +28,12 @@ extends Node
 # }
 #
 const FUMOS: Array[String] = [
-	"marissa",
-	"reimu",
-	"sumireko",
-	"sakuya",
-	"kasen",
+	# "marissa",
+	# "reimu",
+	# "sumireko",
+	# "sakuya",
+	#"kasen",
+	"dummyko"
 ]
 
 const fumoAreaScene = preload("res://src/fumo/fumo_area.tscn")

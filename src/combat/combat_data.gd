@@ -6,16 +6,11 @@ var gravyeard:Array[Fumo] = []
 var opponents:Array[Fumo]
 var feinted_opponents:Array[Fumo] = []
 var turn_count: = 0
-# signal turn_started
-# signal turn_ended
-# signal ally_feinted
-# signal opponent_feinted
-# signal spell_casted
-# signal damage_taken
-# signal fumo_summoned
 
 var ability_queue:Array[AbilityCall]
 var spell_queue:Array[AbilityCall]
+
+var combat_render:Combat
 
 const SEED_RANGE := 256
 
@@ -67,14 +62,17 @@ func get_team(team_id:TEAM) -> Array[Fumo]:
 		return opponents
 	
 
-func _ready() -> void:
-	# allies = _generate_team()
-	# opponents = _generate_team()
-	allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
-	opponents = _create_team(['kasen','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
+func _init() -> void:
+	allies = _rng_team(TEAM.ALLIES)
+	opponents = _rng_team(TEAM.OPPONENTS)
+	# allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
+	# opponents = _create_team(['kasen','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
 	_generate_seed()
 	_start_round()
 	pass
+
+func set_renderer(parent:Combat) -> void:
+	combat_render = parent
 
 func _generate_seed() -> void:
 	seed_value = randi_range(-SEED_RANGE, SEED_RANGE)
@@ -104,6 +102,8 @@ func _make_fumo(fumo_str:String,team_id:TEAM) -> Fumo:
 
 
 func _on_fumo_ko(fumo:Fumo) -> void:
+	combat_render.render_ko(fumo)
+	await combat_render.animation_over
 	print(fumo.name_str + " was KO'ed")
 	_remove_queued_abilities(fumo)
 	if fumo.has_method("on_ko"):
@@ -171,31 +171,42 @@ func _play_turn() -> void:
 	all_turn_abilities.sort_custom(priority_sort)
 	append_abilities(all_turn_abilities)
 
+	if (allies.size() == 0 or opponents.size() == 0):
+		round_over()
+		return
+
 	#smthn turn based
 	var front_ally:Fumo = allies[0]
 	var front_opp:Fumo = opponents[0]
+
+
 	#animate them smashing into each other.
 	_fight(front_ally,front_opp)
 
+
 	if front_ally.hp == 0:
-		gravyeard.append(allies.pop_front())
+		#combat_render.render_ko(front_ally)
+		#gravyeard.append(allies.pop_front())
 		#print(front_ally.name_str + " was KO'ed")
 		if allies.size() < 0:
 			front_ally =_swap_fumo(allies[0])
 
 	if front_opp.hp == 0:
-		feinted_opponents.append(opponents.pop_front())
+		#combat_render.render_ko(front_opp)
+		#feinted_opponents.append(opponents.pop_front())
 		#print(front_opp.name_str + " was KO'ed")
 		if opponents.size() < 0:
 			front_opp = _swap_fumo(opponents[0])
 
-	if (allies.size() == 0 or opponents.size() == 0):
-		round_over()
+	# if (allies.size() == 0 or opponents.size() == 0):
+	# 	round_over()
 	turn_count += 1
 	print("Turn Over")
 
 func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 	fumo.team_id = team_id
+	fumo.koed.connect(_on_fumo_ko)
+	fumo.summoned_fumo.connect(_summon_fumo)
 	team_map[team_id] = _add_to_team(fumo)
 	pass
 
@@ -203,12 +214,16 @@ func _add_to_team(fumo:Fumo) -> Array[Fumo]:
 	var team:Array[Fumo] = get_team(fumo.team_id)
 	if team.size() < TEAM_MAX:
 		team.push_front(fumo)
+		combat_render.add_fumo_area(fumo)
 	return team
 
-static func _fight(ally:Fumo,opponent:Fumo) -> void:
+func _fight(ally:Fumo,opponent:Fumo) -> void:
 	#smash each other
+	combat_render.render_fight(ally, opponent)
+	await combat_render.animation_over
 	ally.hp -= _calculate_damage(opponent)
 	opponent.hp -= _calculate_damage(ally)
+	
 
 static func _calculate_damage(fumo:Fumo) -> int:
 	# check for buffs, statuses, n other stuff
@@ -223,8 +238,13 @@ func _swap_fumo(fumo:Fumo) -> Fumo:
 	var graveyard:Array[Fumo] = graveyard_map[fumo.team_id]
 	graveyard.append(fumo)
 	team.erase(fumo)
-	return team[0]
-
+	combat_render.remove_fumo_area(fumo)
+	if team.is_empty():
+		return null
+	else:
+		return team[0]
+# if jasmine = coooll
+# 	return: "slay!"
 	
 func round_over() -> RESULTS:
 	current_combat_state = COMBAT_STATE.ENDED
@@ -243,10 +263,10 @@ func _use_ability(ability:Callable) -> void:
 	
 
 #debug
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("advance_turn") and current_combat_state == COMBAT_STATE.FIGHTING:
-		_play_turn()
-
+# func _input(event: InputEvent) -> void:
+# 	if event.is_action_pressed("advance_turn") and current_combat_state == COMBAT_STATE.FIGHTING:
+# 		_play_turn()
+#
 func _print_status() -> void:
 	print("---TURN:" + str(turn_count) + "---")
 	print("ABILITY_QUEUE")

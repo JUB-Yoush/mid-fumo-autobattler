@@ -1,10 +1,78 @@
-[gd_scene load_steps=4 format=3 uid="uid://f343gg8fmd45"]
+[gd_scene load_steps=9 format=3 uid="uid://f343gg8fmd45"]
 
 [ext_resource type="Script" uid="uid://2noserkm62p1" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
 [ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_fbnjf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
 size = Vector2(137, 188)
+
+[sub_resource type="Animation" id="Animation_cankm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kqxvh"]
+resource_name = "ally_hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.31, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-28, 0), Vector2(74, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1kr2h"]
+resource_name = "opponent_hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.31, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(28, 0), Vector2(-74, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bkxmj"]
+resource_name = "ko"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 615)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1kr2h"]
+_data = {
+&"RESET": SubResource("Animation_cankm"),
+&"ally_hit": SubResource("Animation_kqxvh"),
+&"ko": SubResource("Animation_bkxmj"),
+&"opponent_hit": SubResource("Animation_1kr2h")
+}
 
 [node name="FumoArea" type="Area2D"]
 script = ExtResource("1_plwnl")
@@ -19,7 +87,7 @@ shape = SubResource("RectangleShape2D_yn2xv")
 
 [node name="Fumo" type="Node" parent="."]
 
-[node name="Control" type="Control" parent="."]
+[node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -24.0
@@ -27,7 +95,7 @@ offset_top = -137.0
 offset_right = 16.0
 offset_bottom = -97.0
 
-[node name="TextureRect" type="Panel" parent="Control"]
+[node name="TextureRect" type="Panel" parent="UI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -41,7 +109,7 @@ offset_bottom = 45.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NameLabel" type="Label" parent="Control/TextureRect"]
+[node name="NameLabel" type="Label" parent="UI/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 145.0
@@ -50,7 +118,7 @@ offset_right = 191.0
 offset_bottom = 27.0
 text = "Game"
 
-[node name="CostLabel" type="Label" parent="Control/TextureRect"]
+[node name="CostLabel" type="Label" parent="UI/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 291.0
@@ -59,7 +127,7 @@ offset_right = 337.0
 offset_bottom = 26.0
 text = "Game"
 
-[node name="HoverIcon" type="TextureRect" parent="Control/TextureRect"]
+[node name="HoverIcon" type="TextureRect" parent="UI/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 40.0
@@ -67,7 +135,7 @@ offset_bottom = 40.0
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_fbnjf")
 
-[node name="TriggerLabel" type="Label" parent="Control/TextureRect"]
+[node name="TriggerLabel" type="Label" parent="UI/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 136.0
@@ -76,7 +144,7 @@ offset_right = 197.0
 offset_bottom = 63.0
 text = "On Buy:"
 
-[node name="AbilityLabel" type="Label" parent="Control/TextureRect"]
+[node name="AbilityLabel" type="Label" parent="UI/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 13.0
@@ -86,7 +154,7 @@ offset_bottom = 120.0
 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
 autowrap_mode = 2
 
-[node name="SpellLabel" type="Label" parent="Control/TextureRect"]
+[node name="SpellLabel" type="Label" parent="UI/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 15.0
@@ -94,3 +162,8 @@ offset_top = 141.0
 offset_right = 329.0
 offset_bottom = 190.0
 autowrap_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1kr2h")
+}
