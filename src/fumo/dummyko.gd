@@ -11,7 +11,7 @@ func _init() -> void:
 	ability_desc = "Nothing."
 	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
 	trigger_desc = "on round start"
-	image = load("res://assets/fumo/Kasen.png")
+	image = load("res://assets/fumo/Chiikawa.png")
 
 
 

@@ -208,6 +208,7 @@ func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 	fumo.koed.connect(_on_fumo_ko)
 	fumo.summoned_fumo.connect(_summon_fumo)
 	team_map[team_id] = _add_to_team(fumo)
+	combat_render.render_summon(fumo)
 	pass
 
 func _add_to_team(fumo:Fumo) -> Array[Fumo]:
@@ -247,6 +248,7 @@ func _swap_fumo(fumo:Fumo) -> Fumo:
 # 	return: "slay!"
 	
 func round_over() -> RESULTS:
+	print_debug(allies.size(),opponents.size())
 	current_combat_state = COMBAT_STATE.ENDED
 	if allies.size() > 1 and opponents.size() == 0:
 		print('player won')

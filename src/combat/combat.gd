@@ -89,7 +89,9 @@ func render_die(fumo:Fumo) -> void:
 	pass
 
 func render_summon(fumo:Fumo) -> void:
-	pass
+	fumoMap[fumo].animPlayer.play("summon")
+	await get_tree().create_timer(.5).timeout
+	animation_over.emit()
 
 func win() -> void:
 	pass

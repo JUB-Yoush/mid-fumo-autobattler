@@ -15,7 +15,6 @@ func _ready() -> void:
 	%AbilityLabel.text = fumo.ability_desc
 	%SpellLabel.text = fumo.spell_card_desc
 	ui.visible = false
-	
 
 func _set_fumo(new_fumo:Fumo) -> void:
 	fumo = new_fumo

@@ -31,8 +31,8 @@ const FUMOS: Array[String] = [
 	# "marissa",
 	# "reimu",
 	# "sumireko",
-	# "sakuya",
-	#"kasen",
+	#"sakuya",
+	"kasen",
 	"dummyko"
 ]
 
