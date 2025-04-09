@@ -1,7 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://f343gg8fmd45"]
+[gd_scene load_steps=15 format=3 uid="uid://f343gg8fmd45"]
 
 [ext_resource type="Script" uid="uid://2noserkm62p1" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
 [ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_fbnjf"]
+[ext_resource type="Texture2D" uid="uid://co0aatm77rm72" path="res://assets/ui/mana_f.png" id="3_1kr2h"]
+[ext_resource type="Texture2D" uid="uid://c0js2jv3113x6" path="res://assets/ui/mana_e.png" id="3_cankm"]
+[ext_resource type="Texture2D" uid="uid://cnk0frjg61bp0" path="res://assets/ui/hp.png" id="5_bkxmj"]
+[ext_resource type="Texture2D" uid="uid://cp52p0054w8td" path="res://assets/ui/atk.png" id="6_kyxqk"]
+[ext_resource type="Texture2D" uid="uid://bl3qox5acnsya" path="res://assets/ui/exp_emp2.png" id="7_1qdud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
 size = Vector2(137, 188)
@@ -124,7 +129,7 @@ offset_top = -137.0
 offset_right = 16.0
 offset_bottom = -97.0
 
-[node name="TextureRect" type="Panel" parent="UI"]
+[node name="HoverInfo" type="Panel" parent="UI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -138,7 +143,7 @@ offset_bottom = 45.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NameLabel" type="Label" parent="UI/TextureRect"]
+[node name="NameLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 145.0
@@ -147,7 +152,7 @@ offset_right = 191.0
 offset_bottom = 27.0
 text = "Game"
 
-[node name="CostLabel" type="Label" parent="UI/TextureRect"]
+[node name="CostLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 291.0
@@ -156,7 +161,7 @@ offset_right = 337.0
 offset_bottom = 26.0
 text = "Game"
 
-[node name="HoverIcon" type="TextureRect" parent="UI/TextureRect"]
+[node name="HoverIcon" type="TextureRect" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 40.0
@@ -164,7 +169,7 @@ offset_bottom = 40.0
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_fbnjf")
 
-[node name="TriggerLabel" type="Label" parent="UI/TextureRect"]
+[node name="TriggerLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 136.0
@@ -173,7 +178,7 @@ offset_right = 197.0
 offset_bottom = 63.0
 text = "On Buy:"
 
-[node name="AbilityLabel" type="Label" parent="UI/TextureRect"]
+[node name="AbilityLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 13.0
@@ -183,7 +188,7 @@ offset_bottom = 120.0
 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
 autowrap_mode = 2
 
-[node name="SpellLabel" type="Label" parent="UI/TextureRect"]
+[node name="SpellLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 15.0
@@ -191,6 +196,115 @@ offset_top = 141.0
 offset_right = 329.0
 offset_bottom = 190.0
 autowrap_mode = 2
+
+[node name="MagGrid" type="GridContainer" parent="UI"]
+layout_mode = 0
+offset_left = -44.0
+offset_top = 278.0
+offset_right = 152.0
+offset_bottom = 352.0
+scale = Vector2(0.7, 0.7)
+columns = 5
+
+[node name="TextureRect" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_1kr2h")
+
+[node name="TextureRect2" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect3" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect4" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect5" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect6" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect7" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect8" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect9" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="TextureRect10" type="TextureRect" parent="UI/MagGrid"]
+layout_mode = 2
+texture = ExtResource("3_cankm")
+
+[node name="LifeTexture" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 222.0
+offset_right = 130.0
+offset_bottom = 303.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("5_bkxmj")
+
+[node name="HpLabel" type="Label" parent="UI/LifeTexture"]
+layout_mode = 0
+offset_left = 34.2857
+offset_top = 17.1429
+offset_right = 74.2857
+offset_bottom = 62.1429
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "00"
+
+[node name="AttackTexture" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = -60.0
+offset_top = 218.0
+offset_right = 39.0
+offset_bottom = 299.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("6_kyxqk")
+
+[node name="AttackLabel" type="Label" parent="UI/AttackTexture"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 20.0
+offset_right = 70.0
+offset_bottom = 65.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "00"
+
+[node name="ExpBar" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = -74.0
+offset_top = 51.0
+offset_right = 104.0
+offset_bottom = 132.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("7_1qdud")
+
+[node name="ExpLabel" type="Label" parent="UI/ExpBar"]
+layout_mode = 0
+offset_left = 17.5
+offset_top = -65.0
+offset_right = 163.5
+offset_bottom = 23.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "LVL1"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

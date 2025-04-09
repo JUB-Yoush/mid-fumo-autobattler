@@ -50,3 +50,9 @@ static func make_fumo(fumo_name:String) -> Fumo:
 	var fumo := Fumo.new()
 	fumo.set_script(fumo_data)
 	return fumo
+
+static func make_fumos(fumo_names:Array[String]) -> Array[Fumo]:	
+	var test_party:Array[Fumo] = []
+	for fumo_str in fumo_names:
+		test_party.append(make_fumo(fumo_str))
+	return test_party

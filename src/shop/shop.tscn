@@ -1,3 +1,25 @@
-[gd_scene format=3 uid="uid://bswhail77cbn3"]
+[gd_scene load_steps=2 format=3 uid="uid://bswhail77cbn3"]
+
+[ext_resource type="Script" uid="uid://c0cro4jr5i4qb" path="res://src/shop/shop.gd" id="1_0npe2"]
 
 [node name="Shop" type="Node"]
+script = ExtResource("1_0npe2")
+
+[node name="Node" type="Node" parent="."]
+
+[node name="ShopItems" type="Node2D" parent="."]
+position = Vector2(195, 164)
+
+[node name="ShopFumo" type="Node2D" parent="."]
+position = Vector2(195, 390)
+
+[node name="Party" type="Node2D" parent="."]
+position = Vector2(945, 585)
+
+[node name="ItemDescLabel" type="Label" parent="."]
+offset_left = 187.0
+offset_top = 900.0
+offset_right = 227.0
+offset_bottom = 923.0
+text = "ItemDescriptions
+"

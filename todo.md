@@ -1,8 +1,24 @@
 # todo
-## render combat
-- make current combat node a object/resource of a  bigger combat node
-- current combat node emits signals that tell the master combat node to do things like animate fumos fighting n shiii
-- we'll need an elegant way to get a fumo's area from it's data. maybe a map that we keep up to date? 
-- dicts are pass by value so that could be annoying though
 
+## combat
 
+- make animations use tweens instead of animplayers
+
+## shop
+
+- make items (same data method as fumo)
+- populate item and fumo shop
+- purchases
+  - item functions triggering
+  - adding fumo to your party
+- selling
+- item effects
+  - temp buffs
+- fumo eating
+- leveling up
+
+## matchmaking
+- generate teams
+- online?????????
+- wins and losses
+- lives and trophies
