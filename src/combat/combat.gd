@@ -28,59 +28,56 @@ func _start_combat() -> void:
 	render_team()
 
 func remove_fumo_area(fumo:Fumo) -> void:
-	fumoMap[fumo].queue_free()
-	fumoMap.erase(fumo)
+	fumo.area.queue_free()
+	#fumoMap.erase(fumo)
 
 	pass
 
 func add_fumo_area(fumo:Fumo) -> void:
 	if fumo.team_id == CombatData.TEAM.ALLIES:
-		var newFumoArea :FumoArea = fumoAreaScene.instantiate()
-		newFumoArea.fumo = fumo
-		fumoMap[fumo] = newFumoArea
-		allyNode.add_child(newFumoArea)
-		newFumoArea.position.x = SCREEN_CENTER - (1 * FUMO_OFFSET)
-		newFumoArea.position.y = 1080/2
+		var fumoArea :FumoArea = fumoAreaScene.instantiate()
+		fumoArea.set_fumo(fumo)
+		allyNode.add_child(fumoArea)
+		fumoArea.position.x = SCREEN_CENTER - (1 * FUMO_OFFSET)
+		fumoArea.position.y = 1080/2
 	else:
-		var newFumoArea :FumoArea = fumoAreaScene.instantiate()
-		newFumoArea.fumo = fumo
-		fumoMap[fumo] = newFumoArea
-		opponentNode.add_child(newFumoArea)
-		newFumoArea.position.x = SCREEN_CENTER + (1 * FUMO_OFFSET)
-		newFumoArea.position.y = 1080/2
+		var fumoArea :FumoArea = fumoAreaScene.instantiate()
+		fumoArea.set_fumo(fumo)
+		opponentNode.add_child(fumoArea)
+		fumoArea.position.x = SCREEN_CENTER + (1 * FUMO_OFFSET)
+		fumoArea.position.y = 1080/2
 
 
 func render_team() -> void:
 	for fumo:Fumo in combat_data.allies:
-		var newFumoArea :FumoArea = fumoAreaScene.instantiate()
-		newFumoArea.fumo = fumo
-		fumoMap[fumo] = newFumoArea
-		allyNode.add_child(newFumoArea)
-		newFumoArea.position.x = SCREEN_CENTER - (allyNode.get_child_count() * FUMO_OFFSET)
-		newFumoArea.position.y = 1080/2
+		var fumoArea :FumoArea = fumoAreaScene.instantiate()
+		fumoArea.set_fumo(fumo)
+		allyNode.add_child(fumoArea)
+		fumoArea.position.x = SCREEN_CENTER - (allyNode.get_child_count() * FUMO_OFFSET)
+		fumoArea.position.y = 1080/2
 
 	for fumo:Fumo in combat_data.opponents:
-		var newFumoArea :FumoArea = fumoAreaScene.instantiate()
-		newFumoArea.fumo = fumo
-		fumoMap[fumo] = newFumoArea
-		opponentNode.add_child(newFumoArea)
-		newFumoArea.position.x = SCREEN_CENTER + (opponentNode.get_child_count() * FUMO_OFFSET)
-		newFumoArea.position.y = 1080/2
+		var fumoArea :FumoArea = fumoAreaScene.instantiate()
+		fumoArea.set_fumo(fumo)
+		opponentNode.add_child(fumoArea)
+		fumoArea.position.x = SCREEN_CENTER + (opponentNode.get_child_count() * FUMO_OFFSET)
+		fumoArea.position.y = 1080/2
 
 
 func render_fight(ally:Fumo, opponent:Fumo) -> void:
 	# these need to be tween based and not use anim players
-	fumoMap[ally].animPlayer.play("ally_hit")
-	fumoMap[opponent].animPlayer.play("opponent_hit")
+	#fumoMap[ally].animPlayer.play("ally_hit")
+	ally.area.animPlayer.play("ally_hit")
+	opponent.area.animPlayer.play("opponent_hit")
 	await get_tree().create_timer(1).timeout
 	animation_over.emit()
 
 func render_ko(fumo:Fumo) -> void:
 	# fly away now
 	if fumo.id == CombatData.TEAM.ALLIES:
-		fumoMap[fumo].animPlayer.play("ko")
+		fumo.area.animPlayer.play("ko")
 	else:
-		fumoMap[fumo].animPlayer.play("ko")
+		fumo.area.animPlayer.play("ko")
 	await get_tree().create_timer(1).timeout
 	animation_over.emit()
 
@@ -89,7 +86,7 @@ func render_die(fumo:Fumo) -> void:
 	pass
 
 func render_summon(fumo:Fumo) -> void:
-	fumoMap[fumo].animPlayer.play("summon")
+	fumo.area.animPlayer.play("summon")
 	await get_tree().create_timer(.5).timeout
 	animation_over.emit()
 

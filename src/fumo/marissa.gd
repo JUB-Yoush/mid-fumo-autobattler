@@ -7,7 +7,7 @@ func _init() -> void:
 	hp = 2
 	max_mp = 5
 	atk = 2
-	mp = 0
+	mp = 3
 	ability_desc = "Buff mp regen rate by 25% for all allies for <lvl> turns"
 	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
 	trigger_desc = "on round start"

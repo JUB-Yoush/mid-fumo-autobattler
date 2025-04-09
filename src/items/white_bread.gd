@@ -4,7 +4,7 @@ func _init() -> void:
 	id = 001
 	name_str = "White Bread"
 	ability_desc = "+2 Health"
-	image = load("res://src/items/white_bread.gd")
+	image = load("res://assets/items/c_bread.png")
 	price = 3
 	tier = 1
 

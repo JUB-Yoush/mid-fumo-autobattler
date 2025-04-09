@@ -4,6 +4,7 @@
 
 [node name="Shop" type="Node"]
 script = ExtResource("1_0npe2")
+metadata/_edit_vertical_guides_ = [1860.0]
 
 [node name="Node" type="Node" parent="."]
 
@@ -11,15 +12,22 @@ script = ExtResource("1_0npe2")
 position = Vector2(195, 164)
 
 [node name="ShopFumo" type="Node2D" parent="."]
-position = Vector2(195, 390)
-
-[node name="Party" type="Node2D" parent="."]
-position = Vector2(945, 585)
+position = Vector2(187, 388)
 
 [node name="ItemDescLabel" type="Label" parent="."]
+visible = false
 offset_left = 187.0
 offset_top = 900.0
 offset_right = 227.0
 offset_bottom = 923.0
 text = "ItemDescriptions
 "
+
+[node name="GoldLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 53.0
+offset_top = 33.0
+offset_right = 125.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 32
+text = "GOLD: 10"

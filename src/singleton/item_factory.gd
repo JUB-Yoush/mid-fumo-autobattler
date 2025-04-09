@@ -8,7 +8,7 @@ enum ITEM_TYPES {
 
 
 const ITEMS: Array[String] = [
-"White Bread"
+"white_bread"
 ]
 
 
@@ -21,8 +21,8 @@ static func make_item(item_name:String) -> Item:
 static func make_random_items(item_count:int, max_tier:int) -> Array:
 	var items:Array[Item] = []
 	for i in item_count:
-		var rng :int = randi_range(0, ITEMS.size())
-		var item_data:Script = load("res://src/items/" + ITEMS[rng] + ".gd")
+		var item_str:String = ITEMS.pick_random()
+		var item_data:Script = load("res://src/items/" + item_str + ".gd")
 		var item := Item.new()
 		item.set_script(item_data)
 		items.append(item)

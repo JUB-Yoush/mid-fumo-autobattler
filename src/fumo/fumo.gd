@@ -11,6 +11,8 @@ const MAX_HP:int = 99
 const MAX_ATK:int = 99
 const EXP_REQUIRED:Array[int] = [2,3,3]
 
+var area:FumoArea
+
 var id:int
 var name_str:String
 var ability_desc:String
@@ -31,7 +33,9 @@ var team_id :CombatData.TEAM
 var hp:int:
 	set(value):
 		hp = clamp(value,0,MAX_HP)
-		print("%s hp set to %d" % [name_str, hp])
+		#print("%s hp set to %d" % [name_str, hp])
+		if area:
+			area.update_hp(hp)
 		if hp == 0:
 			koed.emit(self)
 	get:
@@ -43,12 +47,16 @@ var mp:int = 0:
 		mp = clamp(value,0,max_mp)
 		if mp == max_mp:
 			pass
+		if area:
+			area.update_mp(mp)
 	get:
 		return mp
 
 var atk:int:
 	set(value):
 		atk = clamp(value,0,MAX_ATK)
+		if area:
+			area.update_atk(atk)
 	get:
 		return atk
 

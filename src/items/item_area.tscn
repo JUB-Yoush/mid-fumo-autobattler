@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb0tgvmu24t1y"]
+
+[ext_resource type="Script" uid="uid://cmoji0gq73krt" path="res://src/items/item_area.gd" id="1_s4xrw"]
+[ext_resource type="Texture2D" uid="uid://b4jkkxrrg5a5f" path="res://assets/items/c_bread.png" id="2_nyarj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ofbi"]
+size = Vector2(73, 80)
+
+[node name="ItemArea" type="Area2D"]
+script = ExtResource("1_s4xrw")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_nyarj")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = -104.0
+offset_right = 40.0
+offset_bottom = -64.0
+
+[node name="HoverInfo" type="Panel" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -109.0
+offset_right = 150.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NameLabel" type="Label" parent="Control/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 145.0
+offset_top = 4.0
+offset_right = 191.0
+offset_bottom = 27.0
+text = "Game"
+
+[node name="CostLabel" type="Label" parent="Control/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 291.0
+offset_top = 3.0
+offset_right = 337.0
+offset_bottom = 26.0
+text = "Game"
+
+[node name="HoverIcon" type="TextureRect" parent="Control/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_nyarj")
+
+[node name="AbilityLabel" type="Label" parent="Control/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 14.0
+offset_top = 35.0
+offset_right = 328.0
+offset_bottom = 84.0
+text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+autowrap_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, 2)
+shape = SubResource("RectangleShape2D_4ofbi")
