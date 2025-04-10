@@ -7,6 +7,15 @@ var is_fumo:bool = true
 const mag_filled_texture:Texture = preload("res://assets/ui/mana_f.png")
 const mag_empty_texture:Texture = preload("res://assets/ui/mana_e.png")
 
+const EXP_BAR_TEXTURES = [
+preload("res://assets/ui/exp0-2.png"),
+preload("res://assets/ui/exp1-2.png"),
+preload("res://assets/ui/exp0-3.png"),
+preload("res://assets/ui/exp1-3.png"),
+preload("res://assets/ui/exp2-3.png"),
+preload("res://assets/ui/exp3-3.png"),
+]
+
 @onready var ui:Control = $UI
 @onready var hover_info:Panel = $UI/HoverInfo
 @onready var animPlayer:AnimationPlayer = $AnimationPlayer
@@ -16,13 +25,6 @@ func _ready() -> void:
 	hover_info.visible = false
 	add_to_group("fumo")
 	set_fumo(fumo)
-	# $Sprite2D.texture = fumo.image		
-	# %NameLabel.text = fumo.name_str
-	# %CostLabel.text = str(fumo.price)
-	# %HoverIcon.texture = fumo.image
-	# %TriggerLabel.text = fumo.trigger_desc
-	# %AbilityLabel.text = fumo.ability_desc
-	# %SpellLabel.text = fumo.spell_card_desc
 
 
 func set_fumo(new_fumo:Fumo) -> void:
@@ -42,6 +44,7 @@ func _set_fumo_data(new_fumo:Fumo) -> void:
 	update_hp(fumo.hp)
 	update_atk(fumo.atk)
 	update_mp(fumo.mp)
+	update_exp(fumo.exp_points)
 
 func set_mp_tokens(max_mp:int) -> void:
 	for i in range(max_mp):
@@ -61,5 +64,11 @@ func update_mp(value:int) -> void:
 		magTexture.texture = mag_filled_texture
 		magTexture.visible = true
 
-func update_exp(value:int) -> void:
-	pass
+func update_exp(exp:int) -> void:
+	%ExpBar.texture = EXP_BAR_TEXTURES[exp]
+	if exp >= 0 and exp < 2:
+		%ExpLabel.text = "LVL1"
+	elif exp >= 2 and exp < 5:
+		%ExpLabel.text = "LVL2"
+	elif exp == 5:
+		%ExpLabel.text = "LVL3"

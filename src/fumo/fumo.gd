@@ -9,8 +9,8 @@ signal action_completed
 
 const MAX_HP:int = 99
 const MAX_ATK:int = 99
-const EXP_REQUIRED:Array[int] = [2,3,3]
-
+const MAX_EXP:int = 5
+const LEVEL_REQUIREMENTS = [2,5]
 var area:FumoArea
 
 var id:int
@@ -21,7 +21,7 @@ var trigger_desc:String
 var image:Texture2D
 var price:int
 var tier:int
-var level:int
+var level:int = 0
 #var status:Statuses
 var in_party:bool
 var is_temp:bool
@@ -33,7 +33,6 @@ var team_id :CombatData.TEAM
 var hp:int:
 	set(value):
 		hp = clamp(value,0,MAX_HP)
-		#print("%s hp set to %d" % [name_str, hp])
 		if area:
 			area.update_hp(hp)
 		if hp == 0:
@@ -60,14 +59,18 @@ var atk:int:
 	get:
 		return atk
 
-var experince:int:
+var exp_points:int:
 	set(value):
-		experince = clamp(value,0,EXP_REQUIRED[level])
-		if experince == EXP_REQUIRED[level]:
+		if level == 2:
+			return
+		exp_points = clamp(value,0,MAX_EXP)
+		if exp_points == LEVEL_REQUIREMENTS[level]: 
+			level += 1
 			leveled_up.emit()
-
+		if area:
+			area.update_exp(exp_points)
 	get:
-		return atk
+		return exp_points
 
 func _to_string() -> String:
 	return "%s|hp:%d|atk:%d|mp:%d/%d" % [name_str, hp, atk, mp, max_mp]

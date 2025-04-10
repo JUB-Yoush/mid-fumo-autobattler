@@ -106,19 +106,44 @@ func _process(delta: float) -> void:
 		overlapping_area.global_position = get_viewport().get_mouse_position()
 
 	if Input.is_action_just_released("click") and overlapping_area != null:
-		# if we're holding an item and are over a fumo try to buy the item
+
+		# try to buy
 		if selected_area.is_in_group("item") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("fumo"):
 			if gold <= selected_area.item.price: 
 				print("too poor!")
 			else:
 				purchase(selected_area,selected_area.get_overlapping_areas()[0])
-
+		
+		#fuse fumo
+		if selected_area.is_in_group("fumo") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("fumo"):
+			if selected_area.fumo.id == selected_area.get_overlapping_areas()[0].fumo.id:
+				merge_fumo(selected_area,selected_area.get_overlapping_areas()[0])
 		return_to_position(selected_area)
 		selected_area = null
 
+func merge_fumo(mergeeArea:FumoArea,mergerArea:FumoArea) -> void:
+	var mergee:Fumo = mergeeArea.fumo
+	var merger:Fumo = mergerArea.fumo
+	
+	var new_atk :int = max(mergee.atk,merger.atk) + 1
+	var new_hp :int = max(mergee.hp,merger.hp) + 1
+	var new_exp :int = mergee.exp_points + merger.exp_points + 1
+
+	merger.hp = new_hp
+	merger.atk = new_atk
+	merger.exp_points = new_exp
+
+	remove_party_member(mergeeArea)
+
+func remove_party_member(fumoArea:FumoArea) -> void:
+	party.erase(fumoArea.fumo)
+	fumoArea.queue_free()
+	pass
+
 func purchase(item_bought:ItemArea, buying_fumo:FumoArea) -> void:
-	print(item_bought.item.name_str + " bought by " + buying_fumo.fumo.name_str + str(party.find(buying_fumo.fumo)))
+	print_debug(item_bought.item.name_str + " bought by " + buying_fumo.fumo.name_str + str(party.find(buying_fumo.fumo)))
 	gold -= item_bought.item.price
+	item_bought.item.on_sale(buying_fumo.fumo)
 	remove_item_area(item_bought)
 	pass
 

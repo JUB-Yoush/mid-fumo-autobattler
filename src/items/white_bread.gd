@@ -8,7 +8,7 @@ func _init() -> void:
 	price = 3
 	tier = 1
 
-func _on_sale(fumo:Fumo) -> void:
+func on_sale(fumo:Fumo) -> void:
 	fumo.hp += 2
 	
 	

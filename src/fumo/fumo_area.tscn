@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c0js2jv3113x6" path="res://assets/ui/mana_e.png" id="3_cankm"]
 [ext_resource type="Texture2D" uid="uid://cnk0frjg61bp0" path="res://assets/ui/hp.png" id="5_bkxmj"]
 [ext_resource type="Texture2D" uid="uid://cp52p0054w8td" path="res://assets/ui/atk.png" id="6_kyxqk"]
-[ext_resource type="Texture2D" uid="uid://bl3qox5acnsya" path="res://assets/ui/exp_emp2.png" id="7_1qdud"]
+[ext_resource type="Texture2D" uid="uid://bl3qox5acnsya" path="res://assets/ui/exp0-2.png" id="7_1qdud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
 size = Vector2(93, 146.5)
@@ -322,6 +322,7 @@ theme_override_font_sizes/font_size = 32
 text = "00"
 
 [node name="ExpBar" type="TextureRect" parent="UI"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = -74.0
 offset_top = 51.0
