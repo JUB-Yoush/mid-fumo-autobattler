@@ -19,4 +19,6 @@ func _init() -> void:
 func on_round_start(_allies:Array[Fumo], opponents: Array[Fumo]) -> void:
 	print(_allies, opponents)
 	print("this Reimu KILLS the poor sod at the front of the opposition")
-	CombatData.deal_damage(opponents[0], 99)
+	if opponents.is_empty():
+		return
+	CombatData.deal_damage(opponents[0], 1)

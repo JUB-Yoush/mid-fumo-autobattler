@@ -5,16 +5,20 @@ func _init() -> void:
 	tier = 1
 	name_str = "Marissa"
 	price = 3
-	hp = 2
+	hp = 99
 	max_mp = 5
 	atk = 2
-	mp = 3
+	mp = 4
 	exp_points = 1
-	ability_desc = "Buff mp regen rate by 25% for all allies for <lvl> turns"
-	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
+	ability_desc = "+1 mp to front-line fumo"
+	spell_card_desc = "+99 mp to front line fumo"
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/Marissa.png")
 
 
 func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
+
+func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
+	print("from fumo: " + name_str)
+

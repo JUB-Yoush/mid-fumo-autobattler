@@ -2,22 +2,19 @@
 
 ## combat
 
+- statuses
+
+### polish
+
 - make animations use tweens instead of animplayers
 - shift fumo up to fill empty space
-- mp gain and spellcard triggering
+- make turns automatic
 
 ## shop
 
-- make items (same data method as fumo)
-- populate item and fumo shop
-- purchases
-  - item functions triggering
-  - adding fumo to your party
-- selling
-- item effects
-  - temp buffs
-- fumo eating
-- leveling up
+- temp buffs
+
+### polish
 
 ## matchmaking
 

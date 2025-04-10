@@ -8,7 +8,7 @@ var feinted_opponents:Array[Fumo] = []
 var turn_count: = 0
 
 var ability_queue:Array[AbilityCall]
-var spell_queue:Array[AbilityCall]
+var spellcard_queue:Array[AbilityCall]
 
 var combat_render:Combat
 
@@ -50,6 +50,9 @@ enum RESULTS {
 	DRAW
 	}
 
+const ATTACKING_MP_GAIN = 2
+const BASE_MP_GAIN = 1
+
 var current_combat_state:COMBAT_STATE = COMBAT_STATE.STARTING
 
 var priority_sort:Callable = func(a1:AbilityCall,a2:AbilityCall) -> bool:
@@ -73,11 +76,28 @@ func _init(player_party:Array[Fumo] = []) -> void:
 	_start_round()
 	pass
 
+func _generate_opponents() -> void: 
+	# how to make teams?
+	# start from nothing and give them 10 gold
+	# loop for turn iterations (so it's the same as the player)
+	# every turn the cpu can:
+	# buy a fumo
+	# sell a fumo
+	# re-arrange their team
+	# buy an item
+	pass
+
+func connect_signals(fumo:Fumo) -> void:
+	fumo.koed.connect(_on_fumo_ko)
+	fumo.summoned_fumo.connect(_summon_fumo)
+	fumo.spellcard_ready.connect(_spellcard_ready)
+	pass
+
+
 func set_fumos(fumos:Array[Fumo],team_id:TEAM) -> Array[Fumo]:
 	for fumo in fumos:
 		fumo.team_id = team_id
-		fumo.koed.connect(_on_fumo_ko)
-		fumo.summoned_fumo.connect(_summon_fumo)
+		connect_signals(fumo)
 	return fumos
 
 func set_renderer(parent:Combat) -> void:
@@ -105,8 +125,7 @@ func _create_team(team_array:Array[String],team_id:TEAM) -> Array[Fumo]:
 func _make_fumo(fumo_str:String,team_id:TEAM) -> Fumo:
 	var fumo := FumoFactory.make_fumo(fumo_str)
 	fumo.team_id = team_id
-	fumo.koed.connect(_on_fumo_ko)
-	fumo.summoned_fumo.connect(_summon_fumo)
+	connect_signals(fumo)
 	return fumo
 
 
@@ -150,8 +169,12 @@ func _get_abilities(ability_query:StringName,team:Array[Fumo]) -> Array:
 func _play_ability(ability_call:AbilityCall) -> void:
 	var fumo := ability_call.fumo	
 	print(ability_call.fumo.name_str + " uses ability: " + ability_call.ability)
-	#ability_call.fumo.call(ability_call.ability,team_map[fumo.team_id],team_map[opposing_team[fumo.team_id]])
 	ability_call.fumo.call(ability_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
+
+func _play_spellcard(spellcard_call:AbilityCall) -> void:
+	var fumo := spellcard_call.fumo	
+	print(spellcard_call.fumo.name_str + " uses ability: " + spellcard_call.ability)
+	spellcard_call.fumo.call(spellcard_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
 
 func append_abilities(queue:Array[AbilityCall]) -> Array[AbilityCall]:
 	queue.append_array(ability_queue)
@@ -170,6 +193,8 @@ func _remove_queued_abilities(fumo:Fumo) -> void:
 
 func _play_turn() -> void:
 	_print_status()
+	if spellcard_queue.size() > 0:
+		_play_spellcard(spellcard_queue.pop_front())
 	if ability_queue.size() > 0:
 		_play_ability(ability_queue.pop_front())
 		return
@@ -192,7 +217,7 @@ func _play_turn() -> void:
 
 	#animate them smashing into each other.
 	_fight(front_ally,front_opp)
-
+	increment_mp(front_ally,front_opp)
 
 	if front_ally.hp == 0:
 		if allies.size() < 0:
@@ -204,6 +229,16 @@ func _play_turn() -> void:
 
 	turn_count += 1
 	print("Turn Over")
+
+func increment_mp(front_ally:Fumo, front_opp:Fumo) -> void:
+	front_ally.mp += ATTACKING_MP_GAIN
+	front_opp.mp += ATTACKING_MP_GAIN
+
+	for ally in allies:
+		ally.mp += BASE_MP_GAIN
+
+	for opp in opponents:
+		opp.mp += BASE_MP_GAIN
 
 func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 	fumo.team_id = team_id
@@ -265,13 +300,15 @@ func round_over() -> void:
 
 func _use_ability(ability:Callable) -> void:
 	ability.call(allies,opponents)
-	
 
-#debug
-# func _input(event: InputEvent) -> void:
-# 	if event.is_action_pressed("advance_turn") and current_combat_state == COMBAT_STATE.FIGHTING:
-# 		_play_turn()
-#
+func _spellcard_ready(fumo:Fumo) -> void:
+	var spell_call :AbilityCall = AbilityCall.new()
+	spell_call.fumo = fumo
+	spell_call.ability = "spellcard"
+	spellcard_queue.append(spell_call)
+	spellcard_queue.sort_custom(priority_sort)
+	pass
+
 func _print_status() -> void:
 	print("---TURN:" + str(turn_count) + "---")
 	print("ABILITY_QUEUE")

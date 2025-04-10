@@ -14,6 +14,7 @@ var frozen:bool = false:
 
 const mag_filled_texture:Texture = preload("res://assets/ui/mana_f.png")
 const mag_empty_texture:Texture = preload("res://assets/ui/mana_e.png")
+const mag_used_texture:Texture = preload("res://assets/ui/mana_e.png")
 
 const EXP_BAR_TEXTURES = [
 preload("res://assets/ui/exp0-2.png"),
@@ -71,6 +72,15 @@ func update_mp(value:int) -> void:
 		var magTexture:TextureRect = %MpGrid.get_node("TextureRect%d" % i)
 		magTexture.texture = mag_filled_texture
 		magTexture.visible = true
+
+func clear_mp(max_mp:int) -> void:
+	print_debug("clearing")
+	for i in range(max_mp):
+		var magTexture:TextureRect = %MpGrid.get_node("TextureRect%d" % i)
+		magTexture.texture = mag_used_texture
+		magTexture.visible = true
+		
+
 
 func update_exp(exp:int) -> void:
 	%ExpBar.texture = EXP_BAR_TEXTURES[exp]

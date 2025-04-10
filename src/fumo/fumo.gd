@@ -2,6 +2,7 @@ extends RefCounted
 class_name Fumo
 
 signal koed(fumo:Fumo)
+signal spellcard_ready(fumo:Fumo)
 signal leveled_up(fumo:Fumo)
 signal summoned_fumo(fumo:Fumo)
 signal action_completed
@@ -11,6 +12,14 @@ const MAX_HP:int = 99
 const MAX_ATK:int = 99
 const MAX_EXP:int = 5
 const LEVEL_REQUIREMENTS = [2,5]
+
+enum STATUSES{
+NORMAL,
+FROZEN,
+UNLUCKY,
+BLIND
+}
+
 var area:FumoArea
 
 var id:int
@@ -27,6 +36,7 @@ var in_party:bool
 var is_temp:bool
 var in_shop:bool
 var dead:bool
+var used_spellcard:bool = false
 var team_id :CombatData.TEAM
 
 
@@ -43,9 +53,12 @@ var hp:int:
 var max_mp:int
 var mp:int = 0:
 	set(value):
+		if used_spellcard: 
+			return
 		mp = clamp(value,0,max_mp)
-		if mp == max_mp:
-			pass
+		if mp == max_mp and not used_spellcard:
+			spellcard_ready.emit(self)	
+			used_spellcard = true
 		if area:
 			area.update_mp(mp)
 	get:
@@ -71,6 +84,11 @@ var exp_points:int:
 			area.update_exp(exp_points)
 	get:
 		return exp_points
+
+func spellcard(allies:Array[Fumo],opponents:Array[Fumo]) -> void:
+	print("This fumo has no spellcard made yet. Blame Jayden.")
+	area.clear_mp(max_mp)
+	pass
 
 func _to_string() -> String:
 	return "%s|hp:%d|atk:%d|mp:%d/%d" % [name_str, hp, atk, mp, max_mp]
