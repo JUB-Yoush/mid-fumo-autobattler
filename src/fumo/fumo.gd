@@ -64,7 +64,7 @@ var exp_points:int:
 		if level == 2:
 			return
 		exp_points = clamp(value,0,MAX_EXP)
-		if exp_points == LEVEL_REQUIREMENTS[level]: 
+		if exp_points >= LEVEL_REQUIREMENTS[level]: 
 			level += 1
 			leveled_up.emit()
 		if area:

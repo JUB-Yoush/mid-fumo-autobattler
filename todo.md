@@ -3,6 +3,8 @@
 ## combat
 
 - make animations use tweens instead of animplayers
+- shift fumo up to fill empty space
+- mp gain and spellcard triggering
 
 ## shop
 
@@ -18,7 +20,15 @@
 - leveling up
 
 ## matchmaking
+
 - generate teams
 - online?????????
 - wins and losses
 - lives and trophies
+
+## content
+
+- implement content in the game to play
+- abilities
+- items
+- spellcards

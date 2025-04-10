@@ -55,3 +55,53 @@ team"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BuyArea"]
 position = Vector2(1698.5, 894.5)
 shape = SubResource("RectangleShape2D_0npe2")
+
+[node name="SellArea" type="Area2D" parent="."]
+position = Vector2(0, -340)
+
+[node name="ColorRect" type="ColorRect" parent="SellArea"]
+offset_left = 1540.0
+offset_top = 744.0
+offset_right = 1600.0
+offset_bottom = 805.0
+scale = Vector2(5.289, 5)
+color = Color(0, 0, 0, 0.337255)
+
+[node name="Label" type="Label" parent="SellArea/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Sell"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SellArea"]
+position = Vector2(1698.5, 894.5)
+shape = SubResource("RectangleShape2D_0npe2")
+
+[node name="FreezeArea" type="Area2D" parent="."]
+position = Vector2(0, -687)
+
+[node name="ColorRect" type="ColorRect" parent="FreezeArea"]
+offset_left = 1540.0
+offset_top = 744.0
+offset_right = 1600.0
+offset_bottom = 805.0
+scale = Vector2(5.289, 5)
+color = Color(0, 0, 0, 0.337255)
+
+[node name="Label" type="Label" parent="FreezeArea/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Freeze"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FreezeArea"]
+position = Vector2(1698.5, 894.5)
+shape = SubResource("RectangleShape2D_0npe2")
+
+[node name="RollButton" type="Button" parent="."]
+offset_left = 1312.0
+offset_top = 27.0
+offset_right = 1481.0
+offset_bottom = 123.0
+theme_override_font_sizes/font_size = 64
+text = "ROLL"

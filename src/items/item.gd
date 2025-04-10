@@ -1,6 +1,7 @@
 extends RefCounted
 class_name Item
 
+var area:ItemArea
 var id:int
 var name_str:String
 var ability_desc:String

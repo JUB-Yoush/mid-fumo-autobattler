@@ -4,6 +4,14 @@ class_name FumoArea
 var fumo:Fumo
 var in_shop:bool
 
+var frozen:bool = false:
+	set(value):
+		frozen = value
+		if frozen:
+			$Sprite2D.modulate = Color("#0083c9")
+		else:
+			$Sprite2D.modulate = Color("#ffffff")
+
 const mag_filled_texture:Texture = preload("res://assets/ui/mana_f.png")
 const mag_empty_texture:Texture = preload("res://assets/ui/mana_e.png")
 

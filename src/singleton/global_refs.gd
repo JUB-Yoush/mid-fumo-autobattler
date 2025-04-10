@@ -1,5 +1,7 @@
 extends Node
 
+const TEAM_LIMIT:= 5
+const FUMO_PRICE:= 3
 
 var _player_party:Array[Fumo]
 var player_lvl :int= 1

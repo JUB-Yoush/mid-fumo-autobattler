@@ -2,6 +2,15 @@ extends Area2D
 class_name ItemArea
 
 var item:Item
+
+var frozen:bool = false:
+	set(value):
+		frozen = value
+		if frozen:
+			$Sprite2D.modulate = Color("#0083c9")
+		else:
+			$Sprite2D.modulate = Color("#ffffff")
+
 @onready var hover_info :Panel = $Control/HoverInfo
 
 func _ready() -> void:
@@ -11,9 +20,10 @@ func _ready() -> void:
 
 func set_item(new_item:Item) -> void:
 	item = new_item
+	item.area = self
 	if not is_node_ready():
 		return
-	%Sprite.texture = item.image
+	%Sprite2D.texture = item.image
 	%HoverIcon.texture = item.image
 	%NameLabel.text = item.name_str
 	%CostLabel.text = str(item.price)
