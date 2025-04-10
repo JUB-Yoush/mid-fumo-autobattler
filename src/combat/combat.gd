@@ -23,7 +23,7 @@ func _ready() -> void:
 
 
 func _start_combat() -> void:
-	combat_data = CombatData.new()
+	combat_data = CombatData.new(GlobalRefs.get_battle_party())
 	combat_data.set_renderer(self)
 	render_team()
 

@@ -9,7 +9,7 @@ const PARTY_POS :Vector2 = Vector2(1200,900)
 const SHOPMO_POS :Vector2 = Vector2(1200,500)
 const ITEM_POS :Vector2 = Vector2(195,364)
 
-const fumo_area_scene :PackedScene = preload("res://src/fumo/fumo_area.tscn")
+const fumo_area_scene :PackedScene = preload("res://src/fumo/shop_fumo_area.tscn")
 const item_area_scene :PackedScene = preload("res://src/items/item_area.tscn")
 
 @onready var party :Array[Fumo] = GlobalRefs.get_player_party()
@@ -18,6 +18,7 @@ const item_area_scene :PackedScene = preload("res://src/items/item_area.tscn")
 @onready var sellArea:Area2D = $SellArea
 @onready var freezeArea:Area2D = $FreezeArea
 @onready var rollBtn:Button = $RollButton
+@onready var endBtn:Button = $EndButton
 
 var items:Array[Item]
 var shop_fumos:Array[Fumo]
@@ -53,125 +54,122 @@ func _ready() -> void:
 			fumo_in_freezearea = area	
 	)
 
-	buyArea.area_exited.connect(_buyarea_exited)
-	sellArea.area_exited.connect(_buyarea_exited)
-	freezeArea.area_exited.connect(_buyarea_exited)
+	buyArea.area_exited.connect(_shop_area_exited)
+	sellArea.area_exited.connect(_shop_area_exited)
+	freezeArea.area_exited.connect(_shop_area_exited)
 
 	rollBtn.pressed.connect(shuffle_shop)
+	endBtn.pressed.connect(end_shop_turn)
 
 	gold = 5
 	party = FumoFactory.make_fumos(["reimu","marissa","reimu","marissa"])
+	print(party)
 	render_party()
 	render_shop_items(get_shop_sizes()[1])
-	render_shop_fumo(get_shop_sizes()[0])
+	render_shop_fumos(get_shop_sizes()[0])
 	pass
 
 func shuffle_shop() -> void:
-	var frozen_items:Array[ItemArea] = []
-	var frozen_fumos:Array[FumoArea] = []
+	if gold < 1:
+		return
+	gold -= 1
+	var frozen_items:Array[Item] = []
+	var frozen_fumos:Array[Fumo] = []
 
-	for item in items:
+	while not items.is_empty():
+		var item:Item = items[0]
 		if item.area.frozen:
-			frozen_items.append(item.area)
-		else:
-			remove_item_area(item.area)
+			frozen_items.append(item)
+		remove_item_area(item.area)
 
-	for fumo in shop_fumos:
+	while not shop_fumos.is_empty():
+		var fumo:Fumo = shop_fumos[0]
 		if fumo.area.frozen:
-			frozen_fumos.append(fumo.area)
-		else:
-			remove_fumo_area(fumo.area)
-	
-	
+			frozen_fumos.append(fumo)
+		remove_fumo_area(fumo.area)
+
 	var new_fumos:Array[Fumo] = FumoFactory.make_random_fumos(get_shop_sizes()[0] - frozen_fumos.size(),GlobalRefs.tier)
+	print_debug(frozen_fumos)
+	print_debug(new_fumos)
 
-	for i in new_fumos.size():
-		shop_fumos.append(new_fumos)
-		var fumo:Fumo = new_fumos[i]
-		var fumoArea:FumoArea = fumo_area_scene.instantiate()
-		fumoArea.set_fumo(fumo)
-		fumoArea.in_shop = true
+	for fumo in frozen_fumos:
+		new_fumos.append(fumo)
 
-		add_child(fumoArea)
-		fumoArea.add_to_group("interactable")
-		fumoArea.add_to_group("shop_fumo")
+	shop_fumos = new_fumos
 
-		fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
-		fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
+	for i in shop_fumos.size():
+		render_shop_fumo(i)
 
-		return_to_position(fumoArea)
-	
 	var new_items:Array[Item] = ItemFactory.make_random_items(get_shop_sizes()[1] - frozen_items.size(),GlobalRefs.tier)
-	for i in new_items.size():
-		var item:Item = items[i]
-		items.append(item)
-		var itemArea:ItemArea = item_area_scene.instantiate()
-		itemArea.set_item(item)
+	print_debug(frozen_items)
+	print_debug(new_items)
 
-		add_child(itemArea)
+	for item in frozen_items:
+		new_items.append(item)
 
-		itemArea.add_to_group("interactable")
+	items = new_items
 
-		return_to_position(itemArea)
+	for i in items.size():
+		render_shop_item(i)
 
-		itemArea.mouse_entered.connect(set_overlapping_area.bind(itemArea))
-		itemArea.mouse_exited.connect(clear_overlapping_area.bind(itemArea))
+func render_party_fumo(index:int) -> void:
+	var fumo:Fumo = party[index]
+	var fumoArea :FumoArea = fumo_area_scene.instantiate()
+	print(fumoArea)
+	fumoArea.set_fumo(fumo)
+	add_child(fumoArea)
+	fumoArea.add_to_group("party")
+	fumoArea.add_to_group("interactable")
+	return_to_position(fumoArea)
 
-func render_party() -> void:
-	for i in party.size():
-		var fumo:Fumo = party[i]
-		var fumoArea :FumoArea = fumo_area_scene.instantiate()
-		fumoArea.set_fumo(fumo)
-		#fumoMap[fumo] = fumoArea
+	fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
+	fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
 
-		add_child(fumoArea)
-		fumoArea.add_to_group("party")
-		fumoArea.add_to_group("interactable")
-		fumoArea.global_position.x = PARTY_POS.x - (i * FUMO_OFFSET)
-		fumoArea.global_position.y = PARTY_POS.y
+func render_shop_fumo(index:int, frozen:bool = false) -> void:
+	var fumo:Fumo = shop_fumos[index]
+	var fumoArea:FumoArea = fumo_area_scene.instantiate()
+	fumoArea.set_fumo(fumo)
+	fumoArea.in_shop = true
 
-		fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
-		fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
+	add_child(fumoArea)
+	fumoArea.add_to_group("interactable")
+	fumoArea.add_to_group("shop_fumo")
+	fumoArea.frozen = frozen
 
-func render_shop_fumo(count:int) -> void:
+	return_to_position(fumoArea)
+
+	fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
+	fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
+
+func render_shop_item(index:int) -> void:
+	var item:Item = items[index]
+	var itemArea:ItemArea = item_area_scene.instantiate()
+	itemArea.set_item(item)
+
+	add_child(itemArea)
+
+	itemArea.add_to_group("interactable")
+
+	return_to_position(itemArea)
+
+	itemArea.mouse_entered.connect(set_overlapping_area.bind(itemArea))
+	itemArea.mouse_exited.connect(clear_overlapping_area.bind(itemArea))
+
+func render_shop_fumos(count:int) -> void:
 	shop_fumos = FumoFactory.make_random_fumos(count,GlobalRefs.tier)
 
 	for i in shop_fumos.size():
-		var fumo:Fumo = shop_fumos[i]
-		var fumoArea:FumoArea = fumo_area_scene.instantiate()
-		fumoArea.set_fumo(fumo)
-		fumoArea.in_shop = true
+		render_shop_fumo(i)
 
-		add_child(fumoArea)
-		fumoArea.add_to_group("interactable")
-		fumoArea.add_to_group("shop_fumo")
-		fumoArea.global_position.x = SHOPMO_POS.x - (i * FUMO_OFFSET)
-		fumoArea.global_position.y = SHOPMO_POS.y
-
-		fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
-		fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
-
-	pass
+func render_party() -> void:
+	for i in party.size():
+		render_party_fumo(i)
 
 func render_shop_items(count:int) -> void:
 	items = ItemFactory.make_random_items(count,GlobalRefs.tier)
-	print(items)
 
 	for i in items.size():
-		var item:Item = items[i]
-		var itemArea:ItemArea = item_area_scene.instantiate()
-		itemArea.set_item(item)
-
-		add_child(itemArea)
-
-		itemArea.add_to_group("interactable")
-		itemArea.global_position.x = ITEM_POS.x + (i * ITEM_OFFSET)
-		itemArea.global_position.y = ITEM_POS.y
-
-		itemArea.mouse_entered.connect(set_overlapping_area.bind(itemArea))
-		itemArea.mouse_exited.connect(clear_overlapping_area.bind(itemArea))
-
-	pass
+		render_shop_item(i)
 	
 
 func set_overlapping_area(area:Area2D) -> void:
@@ -201,7 +199,7 @@ func return_to_position(area:Area2D) -> void:
 		area.global_position = Vector2( ITEM_POS.x + (items.find(area.item) * ITEM_OFFSET),ITEM_POS.y)
 		return
 
-	if area.is_in_group("fumo"):
+	if area.is_in_group("shop_fumo"):
 		area.global_position = Vector2( SHOPMO_POS.x - (shop_fumos.find(area.fumo) * FUMO_OFFSET),SHOPMO_POS.y)
 		return
 
@@ -284,12 +282,6 @@ func merge_fumo(mergeeArea:FumoArea,mergerArea:FumoArea) -> void:
 	remove_party_member(mergeeArea)
 	return_to_position(mergerArea)
 
-func remove_party_member(fumoArea:FumoArea) -> void:
-	#party[party.find(fumoArea.fumo)] = null
-	party.erase(fumoArea.fumo)
-	fumoArea.queue_free()
-	for others in party:
-		return_to_position(others.area)
 
 func purchase(item_bought:ItemArea, buying_fumo:FumoArea) -> void:
 	print_debug(item_bought.item.name_str + " bought by " + buying_fumo.fumo.name_str + str(party.find(buying_fumo.fumo)))
@@ -297,6 +289,13 @@ func purchase(item_bought:ItemArea, buying_fumo:FumoArea) -> void:
 	item_bought.item.on_sale(buying_fumo.fumo)
 	remove_item_area(item_bought)
 	pass
+
+func remove_party_member(fumoArea:FumoArea) -> void:
+	#party[party.find(fumoArea.fumo)] = null
+	party.erase(fumoArea.fumo)
+	fumoArea.queue_free()
+	for others in party:
+		return_to_position(others.area)
 
 func remove_item_area(item_bought:ItemArea) -> void:
 	items.erase(item_bought.item)
@@ -320,7 +319,7 @@ func get_shop_sizes() -> Array[int]:
 		return [5,2]
 
 
-func _buyarea_exited(area:Area2D) -> void:
+func _shop_area_exited(area:Area2D) -> void:
 	if fumo_in_buyarea == area:
 		fumo_in_buyarea = null
 
@@ -329,3 +328,13 @@ func _buyarea_exited(area:Area2D) -> void:
 
 	if fumo_in_freezearea == area:
 		fumo_in_freezearea = null
+
+
+func end_shop_turn() -> void:
+	# make a copy of the team, pass that into globalRefs
+	# unset all their areas?
+	# globalRefs uses that to play the battle
+	# once battle ends, return to shop.
+	GlobalRefs.set_player_party(party)
+	GlobalRefs.start_battle()
+	pass

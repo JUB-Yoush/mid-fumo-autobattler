@@ -105,3 +105,11 @@ offset_right = 1481.0
 offset_bottom = 123.0
 theme_override_font_sizes/font_size = 64
 text = "ROLL"
+
+[node name="EndButton" type="Button" parent="."]
+offset_left = 1105.0
+offset_top = 24.0
+offset_right = 1274.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 64
+text = "END"

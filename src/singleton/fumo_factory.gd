@@ -68,6 +68,5 @@ static func make_random_fumos(count:int, max_tier:int) -> Array:
 		fumo.set_script(fumo_data)
 		if fumo.tier <= max_tier:
 			fumos.append(fumo)
-	print_debug(fumos)
 	return fumos
 	

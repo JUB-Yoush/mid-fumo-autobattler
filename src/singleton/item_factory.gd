@@ -8,7 +8,8 @@ enum ITEM_TYPES {
 
 
 const ITEMS: Array[String] = [
-"white_bread"
+"white_bread",
+"orb"
 ]
 
 

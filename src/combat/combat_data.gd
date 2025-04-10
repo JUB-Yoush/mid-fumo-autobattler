@@ -62,14 +62,22 @@ func get_team(team_id:TEAM) -> Array[Fumo]:
 		return opponents
 	
 
-func _init() -> void:
-	allies = _rng_team(TEAM.ALLIES)
+func _init(player_party:Array[Fumo]) -> void:
+	#allies = _rng_team(TEAM.ALLIES)
+	allies = set_fumos(player_party,TEAM.ALLIES)
 	opponents = _rng_team(TEAM.OPPONENTS)
 	# allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
 	# opponents = _create_team(['kasen','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
 	_generate_seed()
 	_start_round()
 	pass
+
+func set_fumos(fumos:Array[Fumo],team_id:TEAM) -> Array[Fumo]:
+	for fumo in fumos:
+		fumo.team_id = team_id
+		fumo.koed.connect(_on_fumo_ko)
+		fumo.summoned_fumo.connect(_summon_fumo)
+	return fumos
 
 func set_renderer(parent:Combat) -> void:
 	combat_render = parent
