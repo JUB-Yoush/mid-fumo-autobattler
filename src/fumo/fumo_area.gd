@@ -2,7 +2,7 @@ extends Area2D
 class_name FumoArea
 
 var fumo:Fumo
-var is_fumo:bool = true
+var in_shop:bool
 
 const mag_filled_texture:Texture = preload("res://assets/ui/mana_f.png")
 const mag_empty_texture:Texture = preload("res://assets/ui/mana_e.png")

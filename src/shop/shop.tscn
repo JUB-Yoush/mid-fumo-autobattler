@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bswhail77cbn3"]
+[gd_scene load_steps=3 format=3 uid="uid://bswhail77cbn3"]
 
 [ext_resource type="Script" uid="uid://c0cro4jr5i4qb" path="res://src/shop/shop.gd" id="1_0npe2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0npe2"]
+size = Vector2(317, 309)
 
 [node name="Shop" type="Node"]
 script = ExtResource("1_0npe2")
@@ -31,3 +34,24 @@ offset_right = 125.0
 offset_bottom = 56.0
 theme_override_font_sizes/font_size = 32
 text = "GOLD: 10"
+
+[node name="BuyArea" type="Area2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="BuyArea"]
+offset_left = 1540.0
+offset_top = 744.0
+offset_right = 1600.0
+offset_bottom = 805.0
+scale = Vector2(5.289, 5)
+color = Color(0, 0, 0, 0.337255)
+
+[node name="Label" type="Label" parent="BuyArea/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Add to
+team"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuyArea"]
+position = Vector2(1698.5, 894.5)
+shape = SubResource("RectangleShape2D_0npe2")

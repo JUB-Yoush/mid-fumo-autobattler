@@ -2,6 +2,7 @@ extends Fumo
 
 func _init() -> void:
 	id = 004
+	tier = 1
 	name_str = "Kasen"
 	price = 3
 	hp = 2

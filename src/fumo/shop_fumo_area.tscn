@@ -1,0 +1,349 @@
+[gd_scene load_steps=14 format=3 uid="uid://bwnmtx7o32kah"]
+
+[ext_resource type="Script" uid="uid://2noserkm62p1" path="res://src/fumo/fumo_area.gd" id="1_v2cpx"]
+[ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_33uet"]
+[ext_resource type="Texture2D" uid="uid://c0js2jv3113x6" path="res://assets/ui/mana_e.png" id="3_0pg6n"]
+[ext_resource type="Texture2D" uid="uid://cnk0frjg61bp0" path="res://assets/ui/hp.png" id="4_h48qo"]
+[ext_resource type="Texture2D" uid="uid://cp52p0054w8td" path="res://assets/ui/atk.png" id="5_7la2i"]
+[ext_resource type="Texture2D" uid="uid://bl3qox5acnsya" path="res://assets/ui/exp0-2.png" id="6_pd8b6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
+size = Vector2(93, 146.5)
+
+[sub_resource type="Animation" id="Animation_cankm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_kqxvh"]
+resource_name = "ally_hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.31, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-28, 0), Vector2(74, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bkxmj"]
+resource_name = "ko"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 615)]
+}
+
+[sub_resource type="Animation" id="Animation_1kr2h"]
+resource_name = "opponent_hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.31, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(28, 0), Vector2(-74, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kyxqk"]
+resource_name = "summon"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1kr2h"]
+_data = {
+&"RESET": SubResource("Animation_cankm"),
+&"ally_hit": SubResource("Animation_kqxvh"),
+&"ko": SubResource("Animation_bkxmj"),
+&"opponent_hit": SubResource("Animation_1kr2h"),
+&"summon": SubResource("Animation_kyxqk")
+}
+
+[node name="FumoArea" type="Area2D"]
+script = ExtResource("1_v2cpx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_33uet")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3.5, 13.75)
+shape = SubResource("RectangleShape2D_yn2xv")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -24.0
+offset_top = -137.0
+offset_right = 16.0
+offset_bottom = -97.0
+
+[node name="HoverInfo" type="Panel" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.0
+offset_top = -167.0
+offset_right = 167.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NameLabel" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 145.0
+offset_top = 4.0
+offset_right = 191.0
+offset_bottom = 27.0
+text = "Game"
+
+[node name="CostLabel" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 291.0
+offset_top = 3.0
+offset_right = 337.0
+offset_bottom = 26.0
+text = "Game"
+
+[node name="HoverIcon" type="TextureRect" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_33uet")
+
+[node name="TriggerLabel" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 136.0
+offset_top = 40.0
+offset_right = 197.0
+offset_bottom = 63.0
+text = "On Buy:"
+
+[node name="AbilityLabel" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 13.0
+offset_top = 71.0
+offset_right = 327.0
+offset_bottom = 120.0
+text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+autowrap_mode = 2
+
+[node name="SpellLabel" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 15.0
+offset_top = 141.0
+offset_right = 329.0
+offset_bottom = 190.0
+autowrap_mode = 2
+
+[node name="MpGrid" type="GridContainer" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -44.0
+offset_top = 278.0
+offset_right = 152.0
+offset_bottom = 352.0
+scale = Vector2(0.7, 0.7)
+columns = 5
+
+[node name="TextureRect0" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect1" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect2" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect3" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect4" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect5" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect6" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect7" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect8" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect9" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect10" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect11" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect12" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect13" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="TextureRect14" type="TextureRect" parent="UI/MpGrid"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_0pg6n")
+
+[node name="LifeTexture" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 222.0
+offset_right = 130.0
+offset_bottom = 303.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("4_h48qo")
+
+[node name="HpLabel" type="Label" parent="UI/LifeTexture"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 34.2857
+offset_top = 17.1429
+offset_right = 74.2857
+offset_bottom = 62.1429
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "00"
+
+[node name="AttackTexture" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = -60.0
+offset_top = 218.0
+offset_right = 39.0
+offset_bottom = 299.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("5_7la2i")
+
+[node name="AttackLabel" type="Label" parent="UI/AttackTexture"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 20.0
+offset_right = 70.0
+offset_bottom = 65.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "00"
+
+[node name="ExpBar" type="TextureRect" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -74.0
+offset_top = 51.0
+offset_right = 104.0
+offset_bottom = 132.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("6_pd8b6")
+
+[node name="ExpLabel" type="Label" parent="UI/ExpBar"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 17.5
+offset_top = -65.0
+offset_right = 163.5
+offset_bottom = 23.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "LVL1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1kr2h")
+}

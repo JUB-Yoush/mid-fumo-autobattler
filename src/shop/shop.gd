@@ -5,15 +5,18 @@ var fumoMap:Dictionary[Fumo,FumoArea]
 const ITEM_OFFSET:int = 150
 const FUMO_OFFSET:int = 250
 
-const PARTY_POS :Vector2 = Vector2(1200,800)
+const PARTY_POS :Vector2 = Vector2(1200,900)
+const SHOPMO_POS :Vector2 = Vector2(1200,500)
 const ITEM_POS :Vector2 = Vector2(195,364)
 
 const fumo_area_scene :PackedScene = preload("res://src/fumo/fumo_area.tscn")
 const item_area_scene :PackedScene = preload("res://src/items/item_area.tscn")
 
 @onready var party :Array[Fumo] = GlobalRefs.get_player_party()
-
+@onready var buyArea:Area2D = $BuyArea
 var items:Array[Item]
+var shop_fumos:Array[Fumo]
+var fumo_in_buyarea:FumoArea
 
 var gold:int:
 	set(value):
@@ -23,14 +26,15 @@ var overlapping_area:Area2D
 var selected_area:Area2D
 var original_area_position:Vector2
 func _ready() -> void:
-	# load in player party
-	# load in items
-	# load in fumo
+	buyArea.area_entered.connect(_buyarea_entered)
+	buyArea.area_entered.connect(_buyarea_exited)
 	gold = 5
 	party = FumoFactory.make_fumos(["marissa","reimu","marissa","reimu","marissa"])
 	render_party()
 	render_shop_items(get_shop_sizes()[1])
+	render_shop_fumo(get_shop_sizes()[0])
 	pass
+
 
 func render_party() -> void:
 	for i in party.size():
@@ -40,15 +44,58 @@ func render_party() -> void:
 		#fumoMap[fumo] = fumoArea
 
 		add_child(fumoArea)
+		fumoArea.add_to_group("party")
+		fumoArea.add_to_group("interactable")
 		fumoArea.global_position.x = PARTY_POS.x - (i * FUMO_OFFSET)
 		fumoArea.global_position.y = PARTY_POS.y
 
 		fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
 		fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
 
+func render_shop_fumo(count:int) -> void:
+	shop_fumos = FumoFactory.make_random_fumos(count,GlobalRefs.tier)
+
+	for i in shop_fumos.size():
+		var fumo:Fumo = shop_fumos[i]
+		var fumoArea:FumoArea = fumo_area_scene.instantiate()
+		fumoArea.set_fumo(fumo)
+		fumoArea.in_shop = true
+
+		add_child(fumoArea)
+		fumoArea.add_to_group("interactable")
+		fumoArea.add_to_group("shop_fumo")
+		fumoArea.global_position.x = SHOPMO_POS.x - (i * FUMO_OFFSET)
+		fumoArea.global_position.y = SHOPMO_POS.y
+
+		fumoArea.mouse_entered.connect(set_overlapping_area.bind(fumoArea))
+		fumoArea.mouse_exited.connect(clear_overlapping_area.bind(fumoArea))
+
+	pass
+
+func render_shop_items(count:int) -> void:
+	items = ItemFactory.make_random_items(count,GlobalRefs.tier)
+	print(items)
+
+	for i in items.size():
+		var item:Item = items[i]
+		var itemArea:ItemArea = item_area_scene.instantiate()
+		itemArea.set_item(item)
+
+		add_child(itemArea)
+
+		itemArea.add_to_group("interactable")
+		itemArea.global_position.x = ITEM_POS.x + (i * ITEM_OFFSET)
+		itemArea.global_position.y = ITEM_POS.y
+
+		itemArea.mouse_entered.connect(set_overlapping_area.bind(itemArea))
+		itemArea.mouse_exited.connect(clear_overlapping_area.bind(itemArea))
+
+	pass
+	
+
 func set_overlapping_area(area:Area2D) -> void:
 	if selected_area != null:
-		if selected_area.is_in_group("fumo") and area.is_in_group("fumo"):
+		if selected_area.is_in_group("party") and area.is_in_group("party"):
 			# switch their positions around
 
 			var area_index:int = party.find(area.fumo)
@@ -61,44 +108,31 @@ func set_overlapping_area(area:Area2D) -> void:
 		return
 	else:
 		overlapping_area = area
-		if area.is_in_group("fumo") or area.is_in_group("item"):
-			area.hover_info.visible = true
+		#if area.is_in_group("party") or area.is_in_group("item"):
+		area.hover_info.visible = true
 
 func return_to_position(area:Area2D) -> void:
-	if area.is_in_group("fumo"):
+	if area.is_in_group("party"):
 		area.global_position = Vector2( PARTY_POS.x - (party.find(area.fumo) * FUMO_OFFSET),PARTY_POS.y)
+		return
 
 	if area.is_in_group("item"):
 		area.global_position = Vector2( ITEM_POS.x + (items.find(area.item) * ITEM_OFFSET),ITEM_POS.y)
+		return
+
+	if area.is_in_group("fumo"):
+		area.global_position = Vector2( SHOPMO_POS.x - (shop_fumos.find(area.fumo) * FUMO_OFFSET),SHOPMO_POS.y)
+		return
 
 func clear_overlapping_area(area:Area2D) -> void:
 	if area == selected_area:
 		return
-	if area.is_in_group("fumo") or area.is_in_group("item"):
-		area.hover_info.visible = false
+		#if area.is_in_group("party") or area.is_in_group("item"):
+	area.hover_info.visible = false
 	if area != overlapping_area:
 		return
 	overlapping_area = null
 
-
-func render_shop_items(count:int) -> void:
-	items = ItemFactory.make_random_items(count,GlobalRefs.teir)
-	print(items)
-
-	for i in items.size():
-		var item:Item = items[i]
-		var itemArea:ItemArea = item_area_scene.instantiate()
-		itemArea.set_item(item)
-
-		add_child(itemArea)
-		itemArea.global_position.x = ITEM_POS.x + (i * ITEM_OFFSET)
-		itemArea.global_position.y = ITEM_POS.y
-
-		itemArea.mouse_entered.connect(set_overlapping_area.bind(itemArea))
-		itemArea.mouse_exited.connect(clear_overlapping_area.bind(itemArea))
-
-	pass
-	
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("click") and overlapping_area != null:
@@ -108,14 +142,14 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_released("click") and overlapping_area != null:
 
 		# try to buy
-		if selected_area.is_in_group("item") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("fumo"):
+		if selected_area.is_in_group("item") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("party"):
 			if gold <= selected_area.item.price: 
 				print("too poor!")
 			else:
 				purchase(selected_area,selected_area.get_overlapping_areas()[0])
 		
 		#fuse fumo
-		if selected_area.is_in_group("fumo") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("fumo"):
+		if selected_area.is_in_group("party") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("party"):
 			if selected_area.fumo.id == selected_area.get_overlapping_areas()[0].fumo.id:
 				merge_fumo(selected_area,selected_area.get_overlapping_areas()[0])
 		return_to_position(selected_area)
@@ -134,8 +168,10 @@ func merge_fumo(mergeeArea:FumoArea,mergerArea:FumoArea) -> void:
 	merger.exp_points = new_exp
 
 	remove_party_member(mergeeArea)
+	return_to_position(mergerArea)
 
 func remove_party_member(fumoArea:FumoArea) -> void:
+	#party[party.find(fumoArea.fumo)] = null
 	party.erase(fumoArea.fumo)
 	fumoArea.queue_free()
 	pass
@@ -161,3 +197,6 @@ func get_shop_sizes() -> Array[int]:
 		return [5,2]
 	else:
 		return [5,2]
+
+func buyarea_entered() -> void:
+	pass
