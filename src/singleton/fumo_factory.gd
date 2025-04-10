@@ -43,6 +43,7 @@ static func make_fumo_area(fumo_name:String) -> FumoArea:
 	var fumoArea:FumoArea = fumoAreaScene.instantiate()	
 	fumoArea.fumo = Fumo.new()
 	fumoArea.fumo.set_script(fumo_data)
+	fumoArea.fumo.area = fumoArea
 	return fumoArea
 
 static func make_fumo(fumo_name:String) -> Fumo:

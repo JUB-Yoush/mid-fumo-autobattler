@@ -9,8 +9,8 @@ const PARTY_POS :Vector2 = Vector2(1200,900)
 const SHOPMO_POS :Vector2 = Vector2(1200,500)
 const ITEM_POS :Vector2 = Vector2(195,364)
 
-const fumo_area_scene :PackedScene = preload("res://src/fumo/shop_fumo_area.tscn")
-const item_area_scene :PackedScene = preload("res://src/items/item_area.tscn")
+@onready var fumo_area_scene :PackedScene= load("res://src/fumo/fumo_area.tscn")
+@onready var item_area_scene :PackedScene= load("res://src/items/item_area.tscn")
 
 @onready var party :Array[Fumo] = GlobalRefs.get_player_party()
 
@@ -114,8 +114,8 @@ func shuffle_shop() -> void:
 
 func render_party_fumo(index:int) -> void:
 	var fumo:Fumo = party[index]
+	print(fumo_area_scene.can_instantiate())
 	var fumoArea :FumoArea = fumo_area_scene.instantiate()
-	print(fumoArea)
 	fumoArea.set_fumo(fumo)
 	add_child(fumoArea)
 	fumoArea.add_to_group("party")

@@ -60,14 +60,15 @@ func get_team(team_id:TEAM) -> Array[Fumo]:
 		return allies
 	else:
 		return opponents
-	
 
-func _init(player_party:Array[Fumo]) -> void:
-	#allies = _rng_team(TEAM.ALLIES)
-	allies = set_fumos(player_party,TEAM.ALLIES)
+func _init(player_party:Array[Fumo] = []) -> void:
+
+	if player_party.is_empty():
+		allies = _rng_team(TEAM.ALLIES)
+	else:
+		allies = set_fumos(player_party,TEAM.ALLIES)
 	opponents = _rng_team(TEAM.OPPONENTS)
-	# allies = _create_team(['reimu','reimu','reimu','reimu','reimu','reimu'], TEAM.ALLIES)
-	# opponents = _create_team(['kasen','sakuya','sumireko','sumireko','sumireko','sumireko'],TEAM.OPPONENTS)
+
 	_generate_seed()
 	_start_round()
 	pass
@@ -181,6 +182,7 @@ func _play_turn() -> void:
 
 	if (allies.size() == 0 or opponents.size() == 0):
 		round_over()
+		
 		return
 
 	#smthn turn based
@@ -193,21 +195,13 @@ func _play_turn() -> void:
 
 
 	if front_ally.hp == 0:
-		#combat_render.render_ko(front_ally)
-		#gravyeard.append(allies.pop_front())
-		#print(front_ally.name_str + " was KO'ed")
 		if allies.size() < 0:
 			front_ally =_swap_fumo(allies[0])
 
 	if front_opp.hp == 0:
-		#combat_render.render_ko(front_opp)
-		#feinted_opponents.append(opponents.pop_front())
-		#print(front_opp.name_str + " was KO'ed")
 		if opponents.size() < 0:
 			front_opp = _swap_fumo(opponents[0])
 
-	# if (allies.size() == 0 or opponents.size() == 0):
-	# 	round_over()
 	turn_count += 1
 	print("Turn Over")
 
@@ -252,21 +246,22 @@ func _swap_fumo(fumo:Fumo) -> Fumo:
 		return null
 	else:
 		return team[0]
+
 # if jasmine = coooll
 # 	return: "slay!"
 	
-func round_over() -> RESULTS:
+func round_over() -> void:
 	print_debug(allies.size(),opponents.size())
 	current_combat_state = COMBAT_STATE.ENDED
-	if allies.size() > 1 and opponents.size() == 0:
+	if allies.size() > 0 and opponents.size() == 0:
 		print('player won')
-		return RESULTS.WIN
-	if opponents.size() > 1 and allies.size() == 0:
+		GlobalRefs.battle_ended(RESULTS.WIN)
+	if opponents.size() > 0 and allies.size() == 0:
 		print('player lost')
-		return RESULTS.LOSS
+		GlobalRefs.battle_ended(RESULTS.LOSS)
 	else:
 		print('draw')
-		return RESULTS.DRAW
+		GlobalRefs.battle_ended(RESULTS.DRAW)
 
 func _use_ability(ability:Callable) -> void:
 	ability.call(allies,opponents)
