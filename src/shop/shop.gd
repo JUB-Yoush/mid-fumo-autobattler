@@ -61,13 +61,12 @@ func _ready() -> void:
 	rollBtn.pressed.connect(shuffle_shop)
 	endBtn.pressed.connect(end_shop_turn)
 
-	gold = 5
+	gold = 10
 	party = FumoFactory.make_fumos(["reimu","marissa","reimu","marissa"])
 	print(party)
 	render_party()
 	render_shop_items(get_shop_sizes()[1])
 	render_shop_fumos(get_shop_sizes()[0])
-	pass
 
 func shuffle_shop() -> void:
 	if gold < 1:
@@ -166,11 +165,11 @@ func render_party() -> void:
 		render_party_fumo(i)
 
 func render_shop_items(count:int) -> void:
-	items = ItemFactory.make_random_items(count,GlobalRefs.tier)
-
+	var frozen_items: Array[Item] = GlobalRefs.get_frozen_shop()[1]
+	items = ItemFactory.make_random_items(count - frozen_items.size(),GlobalRefs.tier)
+	items.append_array(frozen_items)
 	for i in items.size():
 		render_shop_item(i)
-	
 
 func set_overlapping_area(area:Area2D) -> void:
 	if selected_area != null:
@@ -329,6 +328,20 @@ func _shop_area_exited(area:Area2D) -> void:
 	if fumo_in_freezearea == area:
 		fumo_in_freezearea = null
 
+func get_frozen_fumos() -> Array[Fumo]:
+	var frozen_fumos :Array[Fumo] = []
+	for fumo in shop_fumos:
+		if fumo.area.frozen:
+			frozen_fumos.append(fumo)
+	return frozen_fumos
+			
+
+func get_frozen_items() -> Array[Item]:
+	var frozen_items :Array[Item] = []
+	for item in items:
+		if item.area.frozen:
+			frozen_items.append(items)
+	return frozen_items
 
 func end_shop_turn() -> void:
 	# make a copy of the team, pass that into globalRefs
@@ -336,5 +349,6 @@ func end_shop_turn() -> void:
 	# globalRefs uses that to play the battle
 	# once battle ends, return to shop.
 	GlobalRefs.set_player_party(party)
+	GlobalRefs.set_frozen_shop(get_frozen_fumos(),get_frozen_items())	
 	GlobalRefs.start_battle()
 	pass
