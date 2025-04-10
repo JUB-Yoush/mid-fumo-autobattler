@@ -62,7 +62,7 @@ func _ready() -> void:
 	endBtn.pressed.connect(end_shop_turn)
 
 	gold = 10
-	party = FumoFactory.make_fumos(["reimu","marissa","reimu","marissa"])
+	party = FumoFactory.make_fumos(["marissa"])
 	print(party)
 	render_party()
 	render_shop_items(get_shop_sizes()[1])
@@ -155,8 +155,10 @@ func render_shop_item(index:int) -> void:
 	itemArea.mouse_exited.connect(clear_overlapping_area.bind(itemArea))
 
 func render_shop_fumos(count:int) -> void:
-	shop_fumos = FumoFactory.make_random_fumos(count,GlobalRefs.tier)
-
+	var frozen_fumo: Array[Fumo] = GlobalRefs.get_frozen_shop()[0]
+	shop_fumos = FumoFactory.make_random_fumos(count - frozen_fumo.size(),GlobalRefs.tier)
+	print_debug(frozen_fumo)
+	shop_fumos.append_array(frozen_fumo)
 	for i in shop_fumos.size():
 		render_shop_fumo(i)
 
@@ -166,6 +168,7 @@ func render_party() -> void:
 
 func render_shop_items(count:int) -> void:
 	var frozen_items: Array[Item] = GlobalRefs.get_frozen_shop()[1]
+	print_debug(frozen_items)
 	items = ItemFactory.make_random_items(count - frozen_items.size(),GlobalRefs.tier)
 	items.append_array(frozen_items)
 	for i in items.size():
