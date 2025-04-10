@@ -246,6 +246,7 @@ func purchase_fumo(fumoArea:FumoArea) -> void:
 		return
 	gold -= GlobalRefs.FUMO_PRICE
 	fumoArea.in_shop = false
+	fumoArea.frozen = false
 	fumoArea.remove_from_group("shop_fumo")
 	fumoArea.add_to_group("party")
 	party.append(fumoArea.fumo)
@@ -330,7 +331,7 @@ func _shop_area_exited(area:Area2D) -> void:
 
 func get_frozen_fumos() -> Array[Fumo]:
 	var frozen_fumos :Array[Fumo] = []
-	for fumo in shop_fumos:
+	for fumo:Fumo in shop_fumos:
 		if fumo.area.frozen:
 			frozen_fumos.append(fumo)
 	return frozen_fumos
@@ -338,7 +339,7 @@ func get_frozen_fumos() -> Array[Fumo]:
 
 func get_frozen_items() -> Array[Item]:
 	var frozen_items :Array[Item] = []
-	for item in items:
+	for item:Item in items:
 		if item.area.frozen:
 			frozen_items.append(items)
 	return frozen_items
