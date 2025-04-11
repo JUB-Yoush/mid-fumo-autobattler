@@ -6,8 +6,8 @@ const ITEM_OFFSET:int = 150
 const FUMO_OFFSET:int = 250
 
 const PARTY_POS :Vector2 = Vector2(1200,900)
-const SHOPMO_POS :Vector2 = Vector2(1200,500)
-const ITEM_POS :Vector2 = Vector2(1200,200)
+const SHOPMO_POS :Vector2 = Vector2(1200,550)
+const ITEM_POS :Vector2 = Vector2(1200,250)
 
 @onready var fumo_area_scene :PackedScene= load("res://src/fumo/fumo_area.tscn")
 @onready var item_area_scene :PackedScene= load("res://src/items/item_area.tscn")
@@ -220,8 +220,22 @@ func clear_overlapping_area(area:Area2D) -> void:
 		return
 	overlapping_area = null
 
+func check_for_areas() -> void:
+	#fixes entering exiting issue
+	if buyArea.get_overlapping_areas().is_empty() == false:
+		if buyArea.get_overlapping_areas()[0].is_in_group("shop_fumos"):
+			fumo_in_buyarea = buyArea.get_overlapping_areas()[0]
+		
+	if sellArea.get_overlapping_areas().is_empty() == false:
+		if sellArea.get_overlapping_areas()[0].is_in_group("party"):
+			fumo_in_sellarea = sellArea.get_overlapping_areas()[0]
 
+	if freezeArea.get_overlapping_areas().is_empty() == false:
+		if freezeArea.get_overlapping_areas()[0].is_in_group("interactable"):
+			fumo_in_freezearea = freezeArea.get_overlapping_areas()[0]
+	pass
 func _process(delta: float) -> void:
+	check_for_areas()
 	if Input.is_action_pressed("click") and overlapping_area != null:
 		selected_area = overlapping_area
 		overlapping_area.global_position = get_viewport().get_mouse_position()
@@ -259,6 +273,7 @@ func purchase_fumo(fumoArea:FumoArea) -> void:
 	fumoArea.remove_from_group("shop_fumo")
 	fumoArea.add_to_group("party")
 	party.append(fumoArea.fumo)
+	shop_fumos.erase(fumoArea.fumo)
 	for others in party:
 		return_to_position(others.area)
 	#return_to_position(fumoArea)

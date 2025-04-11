@@ -139,7 +139,7 @@ position = Vector2(1698.5, 894.5)
 shape = SubResource("RectangleShape2D_0npe2")
 
 [node name="FreezeArea" type="Area2D" parent="."]
-position = Vector2(-20, 134)
+position = Vector2(154, 131)
 metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="FreezeArea"]
