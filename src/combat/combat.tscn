@@ -4,6 +4,7 @@
 
 [node name="Combat" type="Node"]
 script = ExtResource("1_ekbu2")
+metadata/_edit_horizontal_guides_ = [1078.0]
 
 [node name="Allies" type="Node2D" parent="."]
 

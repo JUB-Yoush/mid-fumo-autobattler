@@ -46,6 +46,7 @@ var hp:int:
 		if area:
 			area.update_hp(hp)
 		if hp == 0:
+			dead = true
 			koed.emit(self)
 	get:
 		return hp
@@ -87,7 +88,8 @@ var exp_points:int:
 
 func spellcard(allies:Array[Fumo],opponents:Array[Fumo]) -> void:
 	print("This fumo has no spellcard made yet. Blame Jayden.")
-	area.clear_mp(max_mp)
+	if area and not dead:
+		area.clear_mp(max_mp)
 	pass
 
 func _to_string() -> String:

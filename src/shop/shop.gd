@@ -7,7 +7,7 @@ const FUMO_OFFSET:int = 250
 
 const PARTY_POS :Vector2 = Vector2(1200,900)
 const SHOPMO_POS :Vector2 = Vector2(1200,500)
-const ITEM_POS :Vector2 = Vector2(195,364)
+const ITEM_POS :Vector2 = Vector2(1200,200)
 
 @onready var fumo_area_scene :PackedScene= load("res://src/fumo/fumo_area.tscn")
 @onready var item_area_scene :PackedScene= load("res://src/items/item_area.tscn")
@@ -30,7 +30,7 @@ var fumo_in_freezearea:Area2D
 var gold:int:
 	set(value):
 		gold = value
-		%GoldLabel.text = "GOLD: %d" % gold
+		%GoldLabel.text = "%d" % gold
 var overlapping_area:Area2D
 var selected_area:Area2D
 var original_area_position:Vector2
@@ -67,6 +67,12 @@ func _ready() -> void:
 	render_party()
 	render_shop_items(get_shop_sizes()[1])
 	render_shop_fumos(get_shop_sizes()[0])
+	set_ui_elements()
+
+func set_ui_elements() -> void:
+	%TurnsLabel.text = str(GlobalRefs.turns)
+	%WinLabel.text = "%d/%d" % [GlobalRefs.wins,GlobalRefs.WIN_REQUIREMENT]
+	%LossesLabel.text = "%d/%d" % [GlobalRefs.losses,GlobalRefs.LOSS_REQUIREMENT]
 
 func shuffle_shop() -> void:
 	if gold < 1:
@@ -198,7 +204,7 @@ func return_to_position(area:Area2D) -> void:
 		return
 
 	if area.is_in_group("item"):
-		area.global_position = Vector2( ITEM_POS.x + (items.find(area.item) * ITEM_OFFSET),ITEM_POS.y)
+		area.global_position = Vector2( ITEM_POS.x - (items.find(area.item) * ITEM_OFFSET),ITEM_POS.y)
 		return
 
 	if area.is_in_group("shop_fumo"):

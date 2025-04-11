@@ -67,25 +67,18 @@ func get_team(team_id:TEAM) -> Array[Fumo]:
 func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
-		allies = _rng_team(TEAM.ALLIES)
+		#allies = _rng_team(TEAM.ALLIES)
+		allies = _create_team(["kasen","kasen"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	opponents = _rng_team(TEAM.OPPONENTS)
+	opponents = _create_team(["kasen","kasen"],TEAM.OPPONENTS)
+	#opponents = TeamGenerator.generate_team(TEAM.OPPONENTS)
+	
 
 	_generate_seed()
 	_start_round()
 	pass
 
-func _generate_opponents() -> void: 
-	# how to make teams?
-	# start from nothing and give them 10 gold
-	# loop for turn iterations (so it's the same as the player)
-	# every turn the cpu can:
-	# buy a fumo
-	# sell a fumo
-	# re-arrange their team
-	# buy an item
-	pass
 
 func connect_signals(fumo:Fumo) -> void:
 	fumo.koed.connect(_on_fumo_ko)
@@ -104,7 +97,7 @@ func set_renderer(parent:Combat) -> void:
 	combat_render = parent
 
 func _generate_seed() -> void:
-	seed_value = randi_range(-SEED_RANGE, SEED_RANGE)
+	seed_value = randi_range(0, SEED_RANGE)
 	print("Seed is %d" % seed_value)
 	seed(seed_value)
 	
@@ -130,6 +123,8 @@ func _make_fumo(fumo_str:String,team_id:TEAM) -> Fumo:
 
 
 func _on_fumo_ko(fumo:Fumo) -> void:
+	#this might lead to problems later...
+	await combat_render.animation_over
 	combat_render.render_ko(fumo)
 	await combat_render.animation_over
 	print(fumo.name_str + " was KO'ed")
@@ -245,6 +240,7 @@ func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 	fumo.koed.connect(_on_fumo_ko)
 	fumo.summoned_fumo.connect(_summon_fumo)
 	team_map[team_id] = _add_to_team(fumo)
+	combat_render.slide_team(team_map[team_id].slice(1),-1)
 	combat_render.render_summon(fumo)
 	pass
 
@@ -261,6 +257,8 @@ func _fight(ally:Fumo,opponent:Fumo) -> void:
 	await combat_render.animation_over
 	ally.hp -= _calculate_damage(opponent)
 	opponent.hp -= _calculate_damage(ally)
+	combat_render.render_fight_return(ally, opponent)
+	await combat_render.animation_over
 	
 
 static func _calculate_damage(fumo:Fumo) -> int:
@@ -277,6 +275,7 @@ func _swap_fumo(fumo:Fumo) -> Fumo:
 	graveyard.append(fumo)
 	team.erase(fumo)
 	combat_render.remove_fumo_area(fumo)
+	combat_render.slide_team(team,1)
 	if team.is_empty():
 		return null
 	else:

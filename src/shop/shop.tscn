@@ -1,21 +1,88 @@
-[gd_scene load_steps=3 format=3 uid="uid://bswhail77cbn3"]
+[gd_scene load_steps=8 format=3 uid="uid://bswhail77cbn3"]
 
 [ext_resource type="Script" uid="uid://c0cro4jr5i4qb" path="res://src/shop/shop.gd" id="1_0npe2"]
+[ext_resource type="Texture2D" uid="uid://gt8ntiobaqn7" path="res://assets/bg/shop_bg.png" id="2_36wjb"]
+[ext_resource type="Texture2D" uid="uid://di1xggfi2dv3o" path="res://assets/ui/ui_coin.png" id="3_uvrpi"]
+[ext_resource type="Texture2D" uid="uid://b6foqyyo3qieb" path="res://assets/ui/ui_hour.png" id="4_u1ah8"]
+[ext_resource type="Texture2D" uid="uid://bu28igo33s772" path="res://assets/ui/ui_trophy.png" id="5_ruqf7"]
+[ext_resource type="Texture2D" uid="uid://dxy0rmjinpinf" path="res://assets/ui/hp_k.png" id="6_cci7d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0npe2"]
-size = Vector2(317, 309)
+size = Vector2(204, 187)
 
 [node name="Shop" type="Node"]
 script = ExtResource("1_0npe2")
 metadata/_edit_vertical_guides_ = [1860.0]
 
-[node name="Node" type="Node" parent="."]
+[node name="BG" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_36wjb")
 
-[node name="ShopItems" type="Node2D" parent="."]
-position = Vector2(195, 164)
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_right = 136.0
+offset_bottom = 109.0
+alignment = 1
 
-[node name="ShopFumo" type="Node2D" parent="."]
-position = Vector2(187, 388)
+[node name="CoinIcon" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("3_uvrpi")
+expand_mode = 2
+stretch_mode = 2
+
+[node name="GoldLabel" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "10"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+offset_left = 200.0
+offset_right = 331.0
+offset_bottom = 109.0
+
+[node name="TimeIcon" type="TextureRect" parent="HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("4_u1ah8")
+stretch_mode = 2
+
+[node name="TurnsLabel" type="Label" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "10"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="."]
+offset_left = 395.0
+offset_right = 531.0
+offset_bottom = 109.0
+
+[node name="WinsIcon" type="TextureRect" parent="HBoxContainer3"]
+layout_mode = 2
+texture = ExtResource("5_ruqf7")
+stretch_mode = 2
+
+[node name="WinLabel" type="Label" parent="HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "10"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="."]
+offset_left = 595.0
+offset_right = 731.0
+offset_bottom = 109.0
+
+[node name="LossIcon" type="TextureRect" parent="HBoxContainer4"]
+layout_mode = 2
+texture = ExtResource("6_cci7d")
+stretch_mode = 2
+
+[node name="LossesLabel" type="Label" parent="HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "10"
 
 [node name="ItemDescLabel" type="Label" parent="."]
 visible = false
@@ -26,22 +93,15 @@ offset_bottom = 923.0
 text = "ItemDescriptions
 "
 
-[node name="GoldLabel" type="Label" parent="."]
-unique_name_in_owner = true
-offset_left = 53.0
-offset_top = 33.0
-offset_right = 125.0
-offset_bottom = 56.0
-theme_override_font_sizes/font_size = 32
-text = "GOLD: 10"
-
 [node name="BuyArea" type="Area2D" parent="."]
+position = Vector2(-261, -168)
+metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="BuyArea"]
-offset_left = 1540.0
-offset_top = 744.0
-offset_right = 1600.0
-offset_bottom = 805.0
+offset_left = 1596.0
+offset_top = 802.0
+offset_right = 1635.0
+offset_bottom = 840.0
 scale = Vector2(5.289, 5)
 color = Color(0, 0, 0, 0.337255)
 
@@ -57,13 +117,14 @@ position = Vector2(1698.5, 894.5)
 shape = SubResource("RectangleShape2D_0npe2")
 
 [node name="SellArea" type="Area2D" parent="."]
-position = Vector2(0, -340)
+position = Vector2(103, -155)
+metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="SellArea"]
-offset_left = 1540.0
-offset_top = 744.0
-offset_right = 1600.0
-offset_bottom = 805.0
+offset_left = 1598.0
+offset_top = 805.0
+offset_right = 1636.0
+offset_bottom = 842.0
 scale = Vector2(5.289, 5)
 color = Color(0, 0, 0, 0.337255)
 
@@ -78,13 +139,14 @@ position = Vector2(1698.5, 894.5)
 shape = SubResource("RectangleShape2D_0npe2")
 
 [node name="FreezeArea" type="Area2D" parent="."]
-position = Vector2(0, -687)
+position = Vector2(-20, 134)
+metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="FreezeArea"]
 offset_left = 1540.0
 offset_top = 744.0
-offset_right = 1600.0
-offset_bottom = 805.0
+offset_right = 1579.0
+offset_bottom = 781.0
 scale = Vector2(5.289, 5)
 color = Color(0, 0, 0, 0.337255)
 
@@ -95,21 +157,30 @@ offset_bottom = 23.0
 text = "Freeze"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FreezeArea"]
-position = Vector2(1698.5, 894.5)
+position = Vector2(1642, 833.5)
 shape = SubResource("RectangleShape2D_0npe2")
 
 [node name="RollButton" type="Button" parent="."]
-offset_left = 1312.0
-offset_top = 27.0
-offset_right = 1481.0
-offset_bottom = 123.0
+offset_left = 1331.0
+offset_top = 940.0
+offset_right = 1500.0
+offset_bottom = 1036.0
 theme_override_font_sizes/font_size = 64
 text = "ROLL"
 
 [node name="EndButton" type="Button" parent="."]
-offset_left = 1105.0
-offset_top = 24.0
-offset_right = 1274.0
-offset_bottom = 120.0
+offset_left = 1060.0
+offset_top = 22.0
+offset_right = 1229.0
+offset_bottom = 118.0
 theme_override_font_sizes/font_size = 64
 text = "END"
+
+[node name="FumoMarker" type="Marker2D" parent="."]
+position = Vector2(1200, 500)
+
+[node name="ItemMarker" type="Marker2D" parent="."]
+position = Vector2(1200, 250)
+
+[node name="PartyMarker" type="Marker2D" parent="."]
+position = Vector2(1200, 900)

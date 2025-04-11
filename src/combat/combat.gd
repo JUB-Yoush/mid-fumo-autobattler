@@ -9,7 +9,11 @@ var allyAreas:Array[FumoArea]
 var opponentAreas:Array[FumoArea]
 
 const FUMO_OFFSET:int = 125
+const SMACK_DIST :int = 125
 const SCREEN_CENTER:int = 1920/2
+var anim_speed :float= .5
+var attack_anim_speed :float= .3
+const ANIM_SPEEDS:Array[float] = [.25,.5, 1]
 
 @onready var allyNode :Node2D = $Allies
 @onready var opponentNode :Node2D = $Opponents
@@ -17,6 +21,8 @@ const SCREEN_CENTER:int = 1920/2
 signal animation_over
 
 var fumoMap:Dictionary[Fumo,FumoArea]
+
+var dir_map:Dictionary = {CombatData.TEAM.ALLIES:1}
 
 func _ready() -> void:
 	_start_combat()
@@ -29,7 +35,6 @@ func _start_combat() -> void:
 
 func remove_fumo_area(fumo:Fumo) -> void:
 	fumo.area.queue_free()
-	#fumoMap.erase(fumo)
 
 	pass
 
@@ -67,18 +72,34 @@ func render_team() -> void:
 func render_fight(ally:Fumo, opponent:Fumo) -> void:
 	# these need to be tween based and not use anim players
 	#fumoMap[ally].animPlayer.play("ally_hit")
-	ally.area.animPlayer.play("ally_hit")
-	opponent.area.animPlayer.play("opponent_hit")
-	await get_tree().create_timer(1).timeout
+	var tween:Tween = create_tween()
+	tween.set_parallel(true)
+	var allyArea:FumoArea = ally.area
+	var oppArea:FumoArea = opponent.area
+	tween.tween_property(allyArea, "position",Vector2(allyArea.position.x +(FUMO_OFFSET),allyArea.position.y),attack_anim_speed)
+	tween.tween_property(oppArea, "position",Vector2(oppArea.position.x -(FUMO_OFFSET),oppArea.position.y),attack_anim_speed)
+	await tween.finished
 	animation_over.emit()
+
+func render_fight_return(ally:Fumo, opponent:Fumo) -> void:
+	var tween:Tween = create_tween()
+	tween.set_parallel(true)
+	var allyArea:FumoArea = ally.area
+	var oppArea:FumoArea = opponent.area
+	tween.tween_property(allyArea, "position",Vector2(allyArea.position.x -(FUMO_OFFSET),allyArea.position.y),attack_anim_speed)
+	tween.tween_property(oppArea, "position",Vector2(oppArea.position.x +(FUMO_OFFSET),oppArea.position.y),attack_anim_speed)
+	await tween.finished
+	animation_over.emit()
+	pass
 
 func render_ko(fumo:Fumo) -> void:
 	# fly away now
-	if fumo.id == CombatData.TEAM.ALLIES:
-		fumo.area.animPlayer.play("ko")
-	else:
-		fumo.area.animPlayer.play("ko")
-	await get_tree().create_timer(1).timeout
+	var tween:Tween = create_tween()
+	tween.set_parallel(true)
+	var fumoArea:FumoArea = fumo.area
+	var team_dir:int = 1 if fumo.team_id == CombatData.TEAM.ALLIES else -1
+	tween.tween_property(fumoArea, "position",Vector2(fumoArea.position.x - (FUMO_OFFSET * team_dir) ,get_viewport().get_visible_rect().size.y),anim_speed)
+	await tween.finished
 	animation_over.emit()
 
 func render_die(fumo:Fumo) -> void:
@@ -89,6 +110,32 @@ func render_summon(fumo:Fumo) -> void:
 	fumo.area.animPlayer.play("summon")
 	await get_tree().create_timer(.5).timeout
 	animation_over.emit()
+	# var tween:Tween = create_tween()
+	# tween.set_parallel(true)
+	# var fumoArea:FumoArea = fumo.area
+	# var team_dir:int = 1 if fumo.team_id == CombatData.TEAM.ALLIES else -1
+	# fumoArea.scale = Vector2.ZERO
+	# tween.tween_property(fumoArea, "scale",Vector2(0.5,0.5),anim_speed)
+	# await tween.finished
+	# animation_over.emit()
+
+func slide_team(team:Array[Fumo],dir:int) -> void:
+	# a up   1 1 = 1
+	# a down 1 -1 = -1
+	# o up   -1 1 = -1
+	# o down -1 -1 = 1
+	if team.size() == 0:
+		animation_over.emit()
+		return
+	var tween:Tween = create_tween()
+	tween.set_parallel(true)
+	for fumo:Fumo in team:
+		var fumoArea:FumoArea = fumo.area
+		var team_dir:int = 1 if fumo.team_id == CombatData.TEAM.ALLIES else -1
+		tween.tween_property(fumoArea, "position",Vector2(fumoArea.position.x +(FUMO_OFFSET * dir * team_dir),fumoArea.position.y),anim_speed)
+	await tween.finished
+	animation_over.emit()
+
 
 func win() -> void:
 	pass

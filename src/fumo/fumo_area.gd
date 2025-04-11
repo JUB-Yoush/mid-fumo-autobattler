@@ -33,7 +33,8 @@ preload("res://assets/ui/exp3-3.png"),
 func _ready() -> void:
 	hover_info.visible = false
 	add_to_group("fumo")
-	set_fumo(fumo)
+	if fumo:
+		set_fumo(fumo)
 
 
 func set_fumo(new_fumo:Fumo) -> void:
@@ -74,6 +75,8 @@ func update_mp(value:int) -> void:
 		magTexture.visible = true
 
 func clear_mp(max_mp:int) -> void:
+	if null:
+		return
 	print_debug("clearing")
 	for i in range(max_mp):
 		var magTexture:TextureRect = %MpGrid.get_node("TextureRect%d" % i)
