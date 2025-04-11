@@ -251,7 +251,14 @@ func _process(delta: float) -> void:
 		#fuse fumo
 		if selected_area.is_in_group("party") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("party"):
 			if selected_area.fumo.id == selected_area.get_overlapping_areas()[0].fumo.id:
-				merge_fumo(selected_area,selected_area.get_overlapping_areas()[0])
+				merge_fumo(selected_area,selected_area.get_overlapping_areas()[0],true)
+		
+		#print(selected_area.is_in_group("shop_fumos"), selected_area.get_overlapping_areas().is_empty() == false, selected_area.get_overlapping_areas()[0].is_in_group("party"))
+		if selected_area.is_in_group("shop_fumo") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("party"):
+			if selected_area.fumo.id == selected_area.get_overlapping_areas()[0].fumo.id and gold >=selected_area.fumo.price:
+				merge_fumo(selected_area,selected_area.get_overlapping_areas()[0],false)
+
+
 		return_to_position(selected_area)
 		selected_area = null
 
@@ -291,7 +298,7 @@ func freeze_shopitem(shopItem:Area2D) -> void:
 
 	shopItem.frozen = !shopItem.frozen
 
-func merge_fumo(mergeeArea:FumoArea,mergerArea:FumoArea) -> void:
+func merge_fumo(mergeeArea:FumoArea,mergerArea:FumoArea,in_party:bool = false) -> void:
 	var mergee:Fumo = mergeeArea.fumo
 	var merger:Fumo = mergerArea.fumo
 	
@@ -302,8 +309,11 @@ func merge_fumo(mergeeArea:FumoArea,mergerArea:FumoArea) -> void:
 	merger.hp = new_hp
 	merger.atk = new_atk
 	merger.exp_points = new_exp
-
-	remove_party_member(mergeeArea)
+	if in_party:
+		remove_party_member(mergeeArea)
+	else:
+		remove_fumo_area(mergeeArea)
+		gold -= 3
 	return_to_position(mergerArea)
 
 
