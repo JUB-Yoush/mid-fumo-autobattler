@@ -4,6 +4,14 @@ class_name FumoArea
 var fumo:Fumo
 var in_shop:bool
 
+var is_blue:bool = false:
+	set(value):
+		is_blue = value
+		if is_blue:
+			$Sprite2D.modulate = Color("#0083c9")
+		else:
+			$Sprite2D.modulate = Color("#ffffff")
+
 var frozen:bool = false:
 	set(value):
 		frozen = value
@@ -96,3 +104,14 @@ func update_exp(exp:int) -> void:
 		%ExpLabel.text = "LVL2"
 	elif exp == 5:
 		%ExpLabel.text = "LVL3"
+
+func update_status_time(remaining_status_time:int) -> void:
+	if remaining_status_time <= 0:
+		%StatusLabel.text = ""
+		return
+	%StatusLabel.text = str(remaining_status_time)
+	
+
+func toggle_blue() -> void:
+	is_blue = !is_blue
+		

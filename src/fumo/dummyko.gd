@@ -1,7 +1,7 @@
 extends Fumo
 
 func _init() -> void:
-	id = 000
+	id = 999
 	name_str = "Dummyko"
 	tier = 1
 	price = 3
@@ -12,9 +12,9 @@ func _init() -> void:
 	ability_desc = "Nothing."
 	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
 	trigger_desc = "on round start"
-	image = load("res://assets/fumo/Cirno.png")
+	image = load("res://assets/fumo/Mokou.png")
 
 
-func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
-	var fumo := FumoFactory.make_fumo("marissa")
-	summoned_fumo.emit(fumo,self.team_id)
+# func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
+# 	var fumo := FumoFactory.make_fumo("marissa")
+# 	summoned_fumo.emit(fumo,self.team_id)

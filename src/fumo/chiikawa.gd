@@ -7,7 +7,6 @@ func _init() -> void:
 	price = 3
 	hp = 5
 	atk = 1
-	mp = 4
 	max_mp = 5
 	can_tank = true
 	exp_points = 0
@@ -36,5 +35,7 @@ func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	if allies.is_empty():
 		return
 	negations = spellcard_scale[level]
+	if area and not dead:
+		area.clear_mp(max_mp)
 	area.clear_mp(max_mp)
 

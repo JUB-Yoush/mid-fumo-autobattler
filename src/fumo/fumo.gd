@@ -21,7 +21,7 @@ UNLUCKY,
 BLIND
 }
 
-var status:STATUSES
+var status:STATUSES = STATUSES.NORMAL
 
 var area:FumoArea
 var ability_descriptions:Array[String] = ["","",""]
@@ -89,16 +89,30 @@ var exp_points:int:
 			return
 		exp_points = clamp(value,0,MAX_EXP)
 		if exp_points >= LEVEL_REQUIREMENTS[level]: 
-			level += 1
-			ability_desc = ability_descriptions[level]
-			spell_card_desc = spellcard_descriptions[level]
-			if area:
-				area.update_labels(ability_desc,spell_card_desc)
-			leveled_up.emit()
+			lvlup()
 		if area:
 			area.update_exp(exp_points)
 	get:
 		return exp_points
+
+var remaining_status_time :int = 0:
+	set(value):
+		remaining_status_time = value
+		if area:
+			area.update_status_time(remaining_status_time)
+		if remaining_status_time == 0:
+			set_status(STATUSES.NORMAL,-1)
+
+func lvlup() -> void:
+			level += 1
+			if ability_descriptions[0] != "":
+				ability_desc = ability_descriptions[level]
+			if spellcard_descriptions[0] != "":
+				spell_card_desc = spellcard_descriptions[level]
+
+			if area:
+				area.update_labels(ability_desc,spell_card_desc)
+			leveled_up.emit()
 
 func tanked(hp_diff:int) -> bool:
 	if hp_diff < 0 and can_tank and negations > 0:
@@ -106,6 +120,21 @@ func tanked(hp_diff:int) -> bool:
 		return true
 	return false
 	
+func set_status(new_status:STATUSES,status_duration:int) -> void:
+	#var prev_status:STATUSES = status
+	if status == new_status:
+		remaining_status_time += status_duration
+	status = new_status
+	match(new_status):
+		STATUSES.NORMAL:
+			if area:
+				area.is_blue = false
+
+		STATUSES.FROZEN:
+			remaining_status_time = status_duration
+			if area:
+				area.is_blue = true
+	pass
 
 func spellcard(allies:Array[Fumo],opponents:Array[Fumo]) -> void:
 	print("This fumo has no spellcard made yet. Blame Jayden.")

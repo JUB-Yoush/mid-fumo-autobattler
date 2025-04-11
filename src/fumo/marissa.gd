@@ -17,8 +17,10 @@ func _init() -> void:
 
 func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
+	print("NOTHING HAPPENDED")
 
 func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
-	area.clear_mp(max_mp)
+	if area and not dead:
+		area.clear_mp(max_mp)
 

@@ -70,10 +70,10 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["youmu","youmu","youmu","youmu","youmu"],TEAM.ALLIES)
+		allies = _create_team(["youmu","marissa","marissa","marissa"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	opponents = _create_team(["dummyko","dummyko","dummyko","chiikawa",],TEAM.OPPONENTS)
+	opponents = _create_team(["dummyko","dummyko","chiikawa","cirno"],TEAM.OPPONENTS)
 	#opponents = TeamGenerator.generate_team(TEAM.OPPONENTS)
 	
 
@@ -193,45 +193,72 @@ func _remove_queued_abilities(fumo:Fumo) -> void:
 		if ability.fumo == fumo:
 			ability_queue.erase(ability)
 
+	for spell in spellcard_queue:
+		if spell.fumo == fumo:
+			spellcard_queue.erase(spell)
+
+func _playable_ability() -> bool:
+	for ability in ability_queue:
+		if ability.fumo.status != Fumo.STATUSES.FROZEN:
+			return true
+	for spell in spellcard_queue:
+		if spell.fumo.status != Fumo.STATUSES.FROZEN:
+			return true
+	return false
+
+func increment_statuses() -> void:
+	for ally in allies:		
+		ally.remaining_status_time -= 1
+	for opp in opponents:		
+		opp.remaining_status_time -= 1
+
 func _play_turn() -> void:
 	_print_status()
-	if spellcard_queue.size() > 0:
-		_play_spellcard(spellcard_queue.pop_front())
-		return
-	if ability_queue.size() > 0:
-		_play_ability(ability_queue.pop_front())
-		return
+	if _playable_ability():
+		if spellcard_queue.size() > 0:
+			while spellcard_queue[0].fumo.status == Fumo.STATUSES.FROZEN:
+				spellcard_queue.push_back(spellcard_queue.pop_front())
+			_play_spellcard(spellcard_queue.pop_front())
+			return
+		if ability_queue.size() > 0:
+			#prevent frozen fumo from using their abilities
+			while ability_queue[0].fumo.status == Fumo.STATUSES.FROZEN:
+				ability_queue.push_back(ability_queue.pop_front())
+			_play_ability(ability_queue.pop_front())
+			return
+	else:
 	
-	var all_turn_abilities := _get_abilities("on_turn_start",allies)
-	var opp_turn_abilities := _get_abilities("on_turn_start",opponents)
-	all_turn_abilities.append_array(opp_turn_abilities)
-	all_turn_abilities.sort_custom(priority_sort)
-	append_abilities(all_turn_abilities)
+		var all_turn_abilities := _get_abilities("on_turn_start",allies)
+		var opp_turn_abilities := _get_abilities("on_turn_start",opponents)
+		all_turn_abilities.append_array(opp_turn_abilities)
+		all_turn_abilities.sort_custom(priority_sort)
+		append_abilities(all_turn_abilities)
 
-	if (allies.size() == 0 or opponents.size() == 0):
-		round_over()
-		
-		return
+		if (allies.size() == 0 or opponents.size() == 0):
+			round_over()
+			
+			return
 
-	#smthn turn based
-	var front_ally:Fumo = allies[0]
-	var front_opp:Fumo = opponents[0]
+		#smthn turn based
+		var front_ally:Fumo = allies[0]
+		var front_opp:Fumo = opponents[0]
 
 
-	#animate them smashing into each other.
-	_fight(front_ally,front_opp)
-	increment_mp(front_ally,front_opp)
+		#animate them smashing into each other.
+		_fight(front_ally,front_opp)
+		increment_mp(front_ally,front_opp)
+		increment_statuses()
 
-	if front_ally.hp == 0:
-		if allies.size() < 0:
-			front_ally =_swap_fumo(allies[0])
+		if front_ally.hp == 0:
+			if allies.size() < 0:
+				front_ally =_swap_fumo(allies[0])
 
-	if front_opp.hp == 0:
-		if opponents.size() < 0:
-			front_opp = _swap_fumo(opponents[0])
+		if front_opp.hp == 0:
+			if opponents.size() < 0:
+				front_opp = _swap_fumo(opponents[0])
 
-	turn_count += 1
-	print("Turn Over")
+		turn_count += 1
+		print("Turn Over")
 
 func increment_mp(front_ally:Fumo, front_opp:Fumo) -> void:
 	front_ally.mp += ATTACKING_MP_GAIN

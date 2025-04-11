@@ -7,7 +7,7 @@ func _init() -> void:
 	hp = 4
 	max_mp = 6
 	atk = 1
-	mp = 5
+	mp = 0
 	ability_desc = "Buff mp regen rate by 25% for all allies for <lvl> turns"
 	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
 	trigger_desc = "on feint"
@@ -38,4 +38,6 @@ func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	var mp_given:int = spellcard_scale[level]
 	for ally in allies:
 		ally.mp += mp_given
+	if area and not dead:
+		area.clear_mp(max_mp)
 	area.clear_mp(max_mp)
