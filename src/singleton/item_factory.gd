@@ -9,7 +9,11 @@ enum ITEM_TYPES {
 
 const ITEMS: Array[String] = [
 "white_bread",
-"orb"
+"orb",
+"grimoire",
+"doll",
+"elixr",
+"horn"
 ]
 
 
@@ -29,4 +33,3 @@ static func make_random_items(item_count:int, max_tier:int) -> Array:
 		items.append(item)
 	print(items)
 	return items
-	

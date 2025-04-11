@@ -70,11 +70,11 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["reimu","yumeko","sumireko"],TEAM.ALLIES)
+		allies = _create_team(["kasen"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	#opponents = _create_team(["youmu","dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
-	opponents = set_fumos(TeamGenerator.generate_team(TEAM.OPPONENTS),TEAM.OPPONENTS)
+	opponents = _create_team(["dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
+	#opponents = set_fumos(TeamGenerator.generate_team(TEAM.OPPONENTS),TEAM.OPPONENTS)
 
 	_generate_seed()
 	_start_round()
@@ -143,6 +143,12 @@ func _on_fumo_ko(fumo:Fumo) -> void:
 		ability_call.ability = "on_ko"
 		ability_queue.push_front(ability_call)
 
+	if fumo.has_doll:
+		var ability_call := AbilityCall.new()
+		ability_call.fumo = fumo
+		ability_call.ability = "summon_doll"
+		ability_queue.push_front(ability_call)
+
 	_swap_fumo(fumo)
 
 	var team :Array[Fumo] = get_team(fumo.team_id)
@@ -151,9 +157,19 @@ func _on_fumo_ko(fumo:Fumo) -> void:
 	ally_abilities.append_array(ability_queue)
 	ability_queue = ally_abilities
 
+func check_maxed_mp() -> void:
+	for ally in allies:
+		if ally.mp == ally.max_mp:
+			_spellcard_ready(ally)
+
+	for opponent in opponents:
+		if opponent.mp == opponent.max_mp:
+			_spellcard_ready(opponent)
+
 func _start_round() -> void:
 	_print_status()
 	current_combat_state = COMBAT_STATE.FIGHTING
+	check_maxed_mp()
 	var start_abilities :Array[AbilityCall] = _get_abilities("on_round_start",allies + opponents)
 	ability_queue += start_abilities
 	

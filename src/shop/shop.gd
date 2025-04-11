@@ -36,6 +36,7 @@ var selected_area:Area2D
 var original_area_position:Vector2
 
 func _ready() -> void:
+	AudioManager.play_music(preload("res://assets/music/menu.ogg"))
 	buyArea.area_entered.connect(
 		func(area:Area2D) -> void:
 		if area.is_in_group("shop_fumo"):

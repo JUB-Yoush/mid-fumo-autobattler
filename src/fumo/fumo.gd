@@ -47,6 +47,13 @@ var prev_hp:int
 var can_tank:bool = false
 var negations :int = 0
 
+var has_doll:bool = false:
+	set(value):
+		has_doll = value
+		if area:
+			area.dollIcon.visible = has_doll
+
+
 var hp:int:
 	set(value):
 		prev_hp = hp
@@ -138,6 +145,10 @@ func set_status(new_status:STATUSES,status_duration:int) -> void:
 			if area:
 				area.set_color("#ff00ff")
 	pass
+
+func summon_doll(allies:Array[Fumo],opponents:Array[Fumo]) -> void:
+	var doll:Fumo = FumoFactory.make_fumo("doll")
+	summoned_fumo.emit(doll,self.team_id)
 
 func spellcard(allies:Array[Fumo],opponents:Array[Fumo]) -> void:
 	print("This fumo has no spellcard made yet. Blame Jayden.")

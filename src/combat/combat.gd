@@ -32,6 +32,7 @@ var animating :bool = false
 var battleTimer:Timer = Timer.new()
 
 func _ready() -> void:
+	AudioManager.play_music(preload("res://assets/music/battle.ogg"))
 	add_child(battleTimer)
 	_start_combat()
 

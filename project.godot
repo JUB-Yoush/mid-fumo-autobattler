@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 FumoFactory="*res://src/singleton/fumo_factory.gd"
 GlobalRefs="*res://src/singleton/global_refs.gd"
+AudioManager="*res://src/audio_manager.gd"
 
 [debug]
 

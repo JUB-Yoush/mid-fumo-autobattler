@@ -37,6 +37,7 @@ preload("res://assets/ui/exp3-3.png"),
 @onready var hover_info:Panel = $UI/HoverInfo
 @onready var animPlayer:AnimationPlayer = $AnimationPlayer
 @onready var sprite2D:Sprite2D = $Sprite2D
+@onready var dollIcon:TextureRect = $UI/DollIcon
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -59,6 +60,7 @@ func _set_fumo_data(new_fumo:Fumo) -> void:
 	%TriggerLabel.text = fumo.trigger_desc
 	%AbilityLabel.text = fumo.ability_desc
 	%SpellLabel.text = fumo.spell_card_desc
+	%DollIcon.visible = fumo.has_doll
 	set_mp_tokens(fumo.max_mp)
 	update_hp(fumo.hp)
 	update_atk(fumo.atk)

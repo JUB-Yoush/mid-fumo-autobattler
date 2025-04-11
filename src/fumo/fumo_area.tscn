@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://f343gg8fmd45"]
+[gd_scene load_steps=17 format=3 uid="uid://f343gg8fmd45"]
 
 [ext_resource type="Script" uid="uid://2noserkm62p1" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
 [ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_fbnjf"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cnk0frjg61bp0" path="res://assets/ui/hp.png" id="5_bkxmj"]
 [ext_resource type="Texture2D" uid="uid://cp52p0054w8td" path="res://assets/ui/atk.png" id="6_kyxqk"]
 [ext_resource type="Texture2D" uid="uid://bl3qox5acnsya" path="res://assets/ui/exp0-2.png" id="7_1qdud"]
+[ext_resource type="Texture2D" uid="uid://b1qqc6an7iteh" path="res://assets/items/c_doll.png" id="9_jtiqg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yn2xv"]
 size = Vector2(59, 91)
@@ -400,6 +401,16 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 64
 text = "LVL1"
+
+[node name="DollIcon" type="TextureRect" parent="UI"]
+unique_name_in_owner = true
+visible = false
+offset_left = 57.0
+offset_top = 125.0
+offset_right = 156.0
+offset_bottom = 206.0
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("9_jtiqg")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
