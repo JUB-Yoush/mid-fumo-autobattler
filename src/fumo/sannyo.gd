@@ -5,7 +5,7 @@ func _init() -> void:
 	tier = 2
 	name_str = "sannyo"
 	hp = 6
-	max_mp = 10
+	max_mp = 5
 	atk = 2
 	ability_uses = 1
 	ability_descriptions = ["prevent one opponent summon","prevent one opponent summon","prevent one opponent summon"]

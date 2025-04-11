@@ -26,6 +26,8 @@
 ## content
 
 - implement content in the game to play
+  - fumo tier 1-3
 - abilities
 - items
+  - all items?
 - spellcards

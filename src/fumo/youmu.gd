@@ -17,7 +17,6 @@ func _init() -> void:
 	image = load("res://assets/fumo/Youmu.png")
 
 
-	
 func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
 	var ghost:Fumo = FumoFactory.make_fumo("ghost")

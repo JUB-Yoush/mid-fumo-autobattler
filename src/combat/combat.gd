@@ -39,7 +39,7 @@ func _start_combat() -> void:
 	combat_data.set_renderer(self)
 	render_team()
 	battleTimer.one_shot = false
-	battleTimer.wait_time = 1.5
+	battleTimer.wait_time = 1.3
 	battleTimer.timeout.connect(battle_timer_timeout)
 	battleTimer.start()
 

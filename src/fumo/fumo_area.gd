@@ -66,6 +66,8 @@ func _set_fumo_data(new_fumo:Fumo) -> void:
 	update_exp(fumo.exp_points)
 
 func set_mp_tokens(max_mp:int) -> void:
+	if null:
+		return
 	for i in range(max_mp):
 		var magTexture:TextureRect = %MpGrid.get_node("TextureRect%d" % i)
 		magTexture.texture = mag_empty_texture

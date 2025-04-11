@@ -6,7 +6,7 @@ func _init() -> void:
 	name_str = "Marissa"
 	price = 3
 	hp = 2
-	max_mp = 5
+	max_mp = 10
 	atk = 2
 	mp = 0
 	exp_points = 1

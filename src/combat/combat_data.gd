@@ -70,7 +70,7 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["rumia","sannyo","marissa","marissa"],TEAM.ALLIES)
+		allies = _create_team(["reimu","yumeko","sumireko"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
 	opponents = _create_team(["youmu","dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
@@ -185,8 +185,9 @@ func _play_ability(ability_call:AbilityCall) -> void:
 func _play_spellcard(spellcard_call:AbilityCall) -> void:
 	var fumo := spellcard_call.fumo
 	print(spellcard_call.fumo.name_str + " uses ability: " + spellcard_call.ability)
-	if spellcard_call.fumo.id == 002:
+	if spellcard_call.fumo.id == 002 and fumo.name_str == "Kasen":
 		summons_negated = true
+		return
 	spellcard_call.fumo.call(spellcard_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
 
 func append_abilities(queue:Array[AbilityCall]) -> Array[AbilityCall]:
@@ -309,11 +310,10 @@ func did_kasen_block(team_id:TEAM) -> bool:
 		print("summons_negated")
 		return true
 	for opp:Fumo in get_team(opposing_team[team_id]):
-		print( opp.id == 002, opp.ability_uses > 0)
-		if opp.id == 002 and opp.ability_uses > 0:
+		if opp.id == 002 and opp.name_str == "Kasen" and opp.ability_uses > 0:
 			opp.ability_uses -= 1
-			return true
 			print("blocked by kasen!")
+			return true
 	return false
 
 func _add_to_team(fumo:Fumo) -> Array[Fumo]:
