@@ -278,8 +278,8 @@ func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 	if did_kasen_block(team_id):
 		return
 	connect_signals(fumo)
+	fumo.team_id = team_id
 	team_map[team_id] = _add_to_team(fumo)
-	_add_to_team(fumo)
 	combat_render.slide_team(team_map[team_id].slice(1),-1)
 	combat_render.render_summon(fumo)
 
