@@ -17,8 +17,8 @@ var summons_negated :bool = false
 const SEED_RANGE := 256
 
 enum TEAM {
-ALLIES,
-OPPONENTS,
+ALLIES = 1,
+OPPONENTS = 2,
 }
 
 var team_map := {
@@ -70,7 +70,7 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["rumia","marissa","marissa","marissa"],TEAM.ALLIES)
+		allies = _create_team(["rumia","sannyo","marissa","marissa"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
 	opponents = _create_team(["youmu","dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
@@ -154,11 +154,22 @@ func _start_round() -> void:
 	var start_abilities :Array[AbilityCall] = _get_abilities("on_round_start",allies + opponents)
 	ability_queue += start_abilities
 	
+func sannyo_block(team_id:int) -> bool:
+	for fumo in get_team(team_id):
+		print(fumo.name_str)
+		if fumo.name_str == "sannyo" and fumo.ability_uses > 0:
+			fumo.ability_uses -= 1
+			print('blocked')
+			return true
+	return false
 
 func _get_abilities(ability_query:StringName,team:Array[Fumo]) -> Array:
 	var ability_calls :Array[AbilityCall] = []
 	for fumo:Fumo in team:
-		if fumo.has_method(ability_query):
+		var team_id:TEAM = fumo.team_id
+		if fumo.has_method(ability_query) and fumo.ability_uses > 0:
+			if sannyo_block(opposing_team[team_id]):
+				continue		
 			var ability_call := AbilityCall.new()
 			ability_call.fumo = fumo
 			ability_call.ability = ability_query
