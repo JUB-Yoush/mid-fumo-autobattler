@@ -36,6 +36,7 @@ preload("res://assets/ui/exp3-3.png"),
 @onready var ui:Control = $UI
 @onready var hover_info:Panel = $UI/HoverInfo
 @onready var animPlayer:AnimationPlayer = $AnimationPlayer
+@onready var sprite2D:Sprite2D = $Sprite2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -4,7 +4,7 @@ func _init() -> void:
 	id = 006
 	name_str = "Rumia"
 	tier = 2
-	hp = 30
+	hp = 1
 	max_mp = 10
 	atk = 5
 	mp = 0

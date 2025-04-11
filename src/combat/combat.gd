@@ -27,7 +27,10 @@ var dir_map:Dictionary = {CombatData.TEAM.ALLIES:1}
 
 var animating :bool = false
 
+var battleTimer:Timer = Timer.new()
+
 func _ready() -> void:
+	add_child(battleTimer)
 	_start_combat()
 
 
@@ -35,6 +38,18 @@ func _start_combat() -> void:
 	combat_data = CombatData.new(GlobalRefs.get_battle_party())
 	combat_data.set_renderer(self)
 	render_team()
+	battleTimer.one_shot = false
+	battleTimer.wait_time = 1.5
+	battleTimer.timeout.connect(battle_timer_timeout)
+	battleTimer.start()
+
+func battle_timer_timeout() -> void:
+	if combat_data.current_combat_state == CombatData.COMBAT_STATE.FIGHTING:
+		if animating:
+			await animation_over
+		rerender_team()
+		combat_data._play_turn()
+	pass
 
 func remove_fumo_area(fumo:Fumo) -> void:
 	fumo.area.queue_free()
@@ -72,8 +87,6 @@ func render_team() -> void:
 		fumoArea.position.y = Y_START
 
 func rerender_team() -> void:
-	if animating:
-		await animation_over
 	for fumo:Fumo in combat_data.allies:
 		var fumoArea:FumoArea = fumo.area
 		fumoArea.position.x = SCREEN_CENTER - ((combat_data.allies.find(fumo)+1) * FUMO_OFFSET)
@@ -100,6 +113,7 @@ func render_fight(ally:Fumo, opponent:Fumo) -> void:
 	animating = false
 
 func render_fight_return(ally:Fumo, opponent:Fumo) -> void:
+
 	animating = true
 	var tween:Tween = create_tween()
 	tween.set_parallel(true)
@@ -112,6 +126,7 @@ func render_fight_return(ally:Fumo, opponent:Fumo) -> void:
 	animating = false
 
 func render_ko(fumo:Fumo) -> void:
+
 	animating = true
 	var tween:Tween = create_tween()
 	tween.set_parallel(true)
@@ -127,17 +142,23 @@ func render_die(fumo:Fumo) -> void:
 	pass
 
 func render_summon(fumo:Fumo) -> void:
-	fumo.area.animPlayer.play("summon")
-	await get_tree().create_timer(.5).timeout
-	animation_over.emit()
-	# var tween:Tween = create_tween()
-	# tween.set_parallel(true)
-	# var fumoArea:FumoArea = fumo.area
-	# var team_dir:int = 1 if fumo.team_id == CombatData.TEAM.ALLIES else -1
-	# fumoArea.scale = Vector2.ZERO
-	# tween.tween_property(fumoArea, "scale",Vector2(0.5,0.5),anim_speed)
-	# await tween.finished
+
+	if animating:
+		await animation_over
+	animating = true
+	# animating = true
+	# fumo.area.animPlayer.play("summon")
+	# await get_tree().create_timer(.5).timeout
 	# animation_over.emit()
+	var tween:Tween = create_tween()
+	tween.set_parallel(true)
+	var fumoArea:FumoArea = fumo.area
+	var team_dir:int = 1 if fumo.team_id == CombatData.TEAM.ALLIES else -1
+	fumoArea.sprite2D.scale = Vector2.ZERO
+	tween.tween_property(fumoArea.sprite2D, "scale",Vector2(0.5,0.5),anim_speed)
+	await tween.finished
+	animation_over.emit()
+	animating = false
 
 func slide_team(team:Array[Fumo],dir:int) -> void:
 	# a up   1 1 = 1
@@ -155,6 +176,7 @@ func slide_team(team:Array[Fumo],dir:int) -> void:
 		tween.tween_property(fumoArea, "position",Vector2(fumoArea.position.x +(FUMO_OFFSET * dir * team_dir),fumoArea.position.y),anim_speed)
 	await tween.finished
 	animation_over.emit()
+	rerender_team()
 
 
 func win() -> void:
