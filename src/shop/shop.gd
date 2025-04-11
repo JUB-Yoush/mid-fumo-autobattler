@@ -62,7 +62,7 @@ func _ready() -> void:
 	endBtn.pressed.connect(end_shop_turn)
 
 	gold = 10
-	party = FumoFactory.make_fumos(["kasen"])
+	party = GlobalRefs.get_player_party()
 	print(party)
 	render_party()
 	render_shop_items(get_shop_sizes()[1])
@@ -383,6 +383,7 @@ func end_shop_turn() -> void:
 	# unset all their areas?
 	# globalRefs uses that to play the battle
 	# once battle ends, return to shop.
+	print_debug(party, "APSDOAJEPWOADPOISDJFPAOIWERJAOPIEJ")
 	GlobalRefs.set_player_party(party)
 	GlobalRefs.set_frozen_shop(get_frozen_fumos(),get_frozen_items())	
 	GlobalRefs.start_battle()

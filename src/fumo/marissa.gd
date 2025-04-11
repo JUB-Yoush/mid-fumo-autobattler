@@ -21,6 +21,9 @@ func _init() -> void:
 
 func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
+	if allies.is_empty():
+		return
+	allies[0].mp = allies[0].max_mp
 	if area and not dead:
 		area.clear_mp(max_mp)
 

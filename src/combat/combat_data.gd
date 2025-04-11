@@ -73,16 +73,16 @@ func _init(player_party:Array[Fumo] = []) -> void:
 		allies = _create_team(["reimu","yumeko","sumireko"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	opponents = _create_team(["youmu","dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
-	#opponents = TeamGenerator.generate_team(TEAM.OPPONENTS)
-	
+	#opponents = _create_team(["youmu","dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
+	opponents = set_fumos(TeamGenerator.generate_team(TEAM.OPPONENTS),TEAM.OPPONENTS)
 
 	_generate_seed()
 	_start_round()
 	pass
 
-
 func connect_signals(fumo:Fumo) -> void:
+	#if fumo.get_signal_connection_list("koed")
+	#fumo.disconnect("koed",_on_fumo_ko)
 	fumo.koed.connect(_on_fumo_ko)
 	fumo.changed_order.connect(_on_order_change)
 	fumo.summoned_fumo.connect(_summon_fumo)
@@ -273,6 +273,8 @@ func _play_turn() -> void:
 		print("Turn Over")
 
 func increment_mp(front_ally:Fumo, front_opp:Fumo) -> void:
+	#var marissa_extra:
+		
 	front_ally.mp += ATTACKING_MP_GAIN
 	front_opp.mp += ATTACKING_MP_GAIN
 	for ally in allies:

@@ -19,3 +19,4 @@ func on_ko(allies:Array[Fumo], opponents: Array[Fumo]) -> void:
 	if opponents.is_empty():
 		return
 	opponents.insert(min(ability_scale[reimu_lvl],opponents.size()),opponents.pop_front())
+	changed_order.emit()
