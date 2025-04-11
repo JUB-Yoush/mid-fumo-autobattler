@@ -106,7 +106,7 @@ func update_exp(exp:int) -> void:
 		%ExpLabel.text = "LVL3"
 
 func update_status_time(remaining_status_time:int) -> void:
-	if remaining_status_time <= 0:
+	if remaining_status_time < 1:
 		%StatusLabel.text = ""
 		return
 	%StatusLabel.text = str(remaining_status_time)
@@ -114,4 +114,7 @@ func update_status_time(remaining_status_time:int) -> void:
 
 func toggle_blue() -> void:
 	is_blue = !is_blue
-		
+
+func set_color(color_string:String) -> void:
+	$Sprite2D.modulate = Color(color_string)
+	pass

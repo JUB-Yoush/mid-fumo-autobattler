@@ -15,6 +15,6 @@ func _init() -> void:
 	image = load("res://assets/fumo/Mokou.png")
 
 
-# func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
-# 	var fumo := FumoFactory.make_fumo("marissa")
-# 	summoned_fumo.emit(fumo,self.team_id)
+func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
+	var fumo := FumoFactory.make_fumo("marissa")
+	summoned_fumo.emit(fumo,self.team_id)

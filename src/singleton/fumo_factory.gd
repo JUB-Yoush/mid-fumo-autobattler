@@ -37,6 +37,8 @@ const FUMOS: Array[String] = [
 	"dummyko",
 	"chiikawa",
 	"youmu",
+	"cirno",
+	"rumia",
 	"ghost",
 ]
 

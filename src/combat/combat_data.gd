@@ -73,7 +73,7 @@ func _init(player_party:Array[Fumo] = []) -> void:
 		allies = _create_team(["youmu","marissa","marissa","marissa"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	opponents = _create_team(["dummyko","dummyko","chiikawa","cirno"],TEAM.OPPONENTS)
+	opponents = _create_team(["youmu","dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
 	#opponents = TeamGenerator.generate_team(TEAM.OPPONENTS)
 	
 
@@ -279,6 +279,7 @@ func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 		return
 	connect_signals(fumo)
 	team_map[team_id] = _add_to_team(fumo)
+	_add_to_team(fumo)
 	combat_render.slide_team(team_map[team_id].slice(1),-1)
 	combat_render.render_summon(fumo)
 
@@ -322,7 +323,9 @@ func _fight(ally:Fumo,opponent:Fumo) -> void:
 	
 
 static func _calculate_damage(fumo:Fumo) -> int:
-	# check for buffs, statuses, n other stuff
+	if fumo.status == Fumo.STATUSES.BLIND:
+		fumo.set_status(Fumo.STATUSES.NORMAL,-1)
+		return 0
 	return fumo.atk
 
 static func deal_damage(fumo:Fumo,damage:int) -> void:

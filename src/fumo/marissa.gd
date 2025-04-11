@@ -15,9 +15,9 @@ func _init() -> void:
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/Marissa.png")
 
-func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
-	print("from fumo: " + name_str)
-	print("NOTHING HAPPENDED")
+# func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
+# 	print("from fumo: " + name_str)
+# 	print("NOTHING HAPPENDED")
 
 func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)

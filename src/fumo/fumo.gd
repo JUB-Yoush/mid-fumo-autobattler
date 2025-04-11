@@ -134,6 +134,9 @@ func set_status(new_status:STATUSES,status_duration:int) -> void:
 			remaining_status_time = status_duration
 			if area:
 				area.is_blue = true
+		STATUSES.BLIND:
+			if area:
+				area.set_color("#ff00ff")
 	pass
 
 func spellcard(allies:Array[Fumo],opponents:Array[Fumo]) -> void:
