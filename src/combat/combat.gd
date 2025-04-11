@@ -8,11 +8,12 @@ var fumoAreaScene:PackedScene = preload("res://src/fumo/fumo_area.tscn")
 var allyAreas:Array[FumoArea]
 var opponentAreas:Array[FumoArea]
 
-const FUMO_OFFSET:int = 125
+const FUMO_OFFSET:int = 150
 const SMACK_DIST :int = 125
 const SCREEN_CENTER:int = 1920/2
-var anim_speed :float= .5
-var attack_anim_speed :float= .3
+const Y_START:int = 840
+var anim_speed :float= .3
+var attack_anim_speed :float= .2
 const ANIM_SPEEDS:Array[float] = [.25,.5, 1]
 
 @onready var allyNode :Node2D = $Allies
@@ -23,6 +24,8 @@ signal animation_over
 var fumoMap:Dictionary[Fumo,FumoArea]
 
 var dir_map:Dictionary = {CombatData.TEAM.ALLIES:1}
+
+var animating :bool = false
 
 func _ready() -> void:
 	_start_combat()
@@ -44,13 +47,13 @@ func add_fumo_area(fumo:Fumo) -> void:
 		fumoArea.set_fumo(fumo)
 		allyNode.add_child(fumoArea)
 		fumoArea.position.x = SCREEN_CENTER - (1 * FUMO_OFFSET)
-		fumoArea.position.y = 1080/2
+		fumoArea.position.y = Y_START
 	else:
 		var fumoArea :FumoArea = fumoAreaScene.instantiate()
 		fumoArea.set_fumo(fumo)
 		opponentNode.add_child(fumoArea)
 		fumoArea.position.x = SCREEN_CENTER + (1 * FUMO_OFFSET)
-		fumoArea.position.y = 1080/2
+		fumoArea.position.y = Y_START
 
 
 func render_team() -> void:
@@ -59,19 +62,33 @@ func render_team() -> void:
 		fumoArea.set_fumo(fumo)
 		allyNode.add_child(fumoArea)
 		fumoArea.position.x = SCREEN_CENTER - (allyNode.get_child_count() * FUMO_OFFSET)
-		fumoArea.position.y = 1080/2
+		fumoArea.position.y = Y_START
 
 	for fumo:Fumo in combat_data.opponents:
 		var fumoArea :FumoArea = fumoAreaScene.instantiate()
 		fumoArea.set_fumo(fumo)
 		opponentNode.add_child(fumoArea)
 		fumoArea.position.x = SCREEN_CENTER + (opponentNode.get_child_count() * FUMO_OFFSET)
-		fumoArea.position.y = 1080/2
+		fumoArea.position.y = Y_START
+
+func rerender_team() -> void:
+	if animating:
+		await animation_over
+	for fumo:Fumo in combat_data.allies:
+		var fumoArea:FumoArea = fumo.area
+		fumoArea.position.x = SCREEN_CENTER - ((combat_data.allies.find(fumo)+1) * FUMO_OFFSET)
+		fumoArea.position.y = Y_START
+
+	for fumo:Fumo in combat_data.opponents:
+		var fumoArea:FumoArea = fumo.area
+		fumoArea.position.x = SCREEN_CENTER + ((combat_data.opponents.find(fumo)+1) * FUMO_OFFSET)
+		fumoArea.position.y = Y_START
 
 
 func render_fight(ally:Fumo, opponent:Fumo) -> void:
 	# these need to be tween based and not use anim players
 	#fumoMap[ally].animPlayer.play("ally_hit")
+	animating = true
 	var tween:Tween = create_tween()
 	tween.set_parallel(true)
 	var allyArea:FumoArea = ally.area
@@ -80,8 +97,10 @@ func render_fight(ally:Fumo, opponent:Fumo) -> void:
 	tween.tween_property(oppArea, "position",Vector2(oppArea.position.x -(FUMO_OFFSET),oppArea.position.y),attack_anim_speed)
 	await tween.finished
 	animation_over.emit()
+	animating = false
 
 func render_fight_return(ally:Fumo, opponent:Fumo) -> void:
+	animating = true
 	var tween:Tween = create_tween()
 	tween.set_parallel(true)
 	var allyArea:FumoArea = ally.area
@@ -90,10 +109,10 @@ func render_fight_return(ally:Fumo, opponent:Fumo) -> void:
 	tween.tween_property(oppArea, "position",Vector2(oppArea.position.x +(FUMO_OFFSET),oppArea.position.y),attack_anim_speed)
 	await tween.finished
 	animation_over.emit()
-	pass
+	animating = false
 
 func render_ko(fumo:Fumo) -> void:
-	# fly away now
+	animating = true
 	var tween:Tween = create_tween()
 	tween.set_parallel(true)
 	var fumoArea:FumoArea = fumo.area
@@ -101,6 +120,7 @@ func render_ko(fumo:Fumo) -> void:
 	tween.tween_property(fumoArea, "position",Vector2(fumoArea.position.x - (FUMO_OFFSET * team_dir) ,get_viewport().get_visible_rect().size.y),anim_speed)
 	await tween.finished
 	animation_over.emit()
+	animating = false
 
 func render_die(fumo:Fumo) -> void:
 	# fly away now
@@ -153,6 +173,8 @@ func _input(event: InputEvent) -> void:
 
 func _print_status() -> void:
 	print("---TURN:" + str(combat_data.turn_count) + "---")
+	print("SPELL_QUEUE")
+	print(combat_data.spellcard_queue)
 	print("ABILITY_QUEUE")
 	print(combat_data.ability_queue)
 	print("ALLIES:")

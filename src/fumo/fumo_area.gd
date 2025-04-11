@@ -14,7 +14,7 @@ var frozen:bool = false:
 
 const mag_filled_texture:Texture = preload("res://assets/ui/mana_f.png")
 const mag_empty_texture:Texture = preload("res://assets/ui/mana_e.png")
-const mag_used_texture:Texture = preload("res://assets/ui/mana_e.png")
+const mag_used_texture:Texture = preload("res://assets/ui/mana_u.png")
 
 const EXP_BAR_TEXTURES = [
 preload("res://assets/ui/exp0-2.png"),
@@ -83,7 +83,10 @@ func clear_mp(max_mp:int) -> void:
 		magTexture.texture = mag_used_texture
 		magTexture.visible = true
 		
-
+func update_labels(ability_text:String,spell_text:String) -> void:
+	%AbilityLabel.text = ability_text
+	%SpellLabel.text = spell_text
+	pass
 
 func update_exp(exp:int) -> void:
 	%ExpBar.texture = EXP_BAR_TEXTURES[exp]

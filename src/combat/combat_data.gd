@@ -12,6 +12,8 @@ var spellcard_queue:Array[AbilityCall]
 
 var combat_render:Combat
 
+var summons_negated :bool = false
+
 const SEED_RANGE := 256
 
 enum TEAM {
@@ -68,10 +70,10 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["kasen","kasen"],TEAM.ALLIES)
+		allies = _create_team(["kasen","marissa","dummyko","sumireko"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	opponents = _create_team(["kasen","kasen"],TEAM.OPPONENTS)
+	opponents = _create_team(["dummyko","dummyko","dummyko","chiikawa",],TEAM.OPPONENTS)
 	#opponents = TeamGenerator.generate_team(TEAM.OPPONENTS)
 	
 
@@ -82,10 +84,13 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 func connect_signals(fumo:Fumo) -> void:
 	fumo.koed.connect(_on_fumo_ko)
+	fumo.changed_order.connect(_on_order_change)
 	fumo.summoned_fumo.connect(_summon_fumo)
 	fumo.spellcard_ready.connect(_spellcard_ready)
 	pass
 
+func _on_order_change() -> void:
+	combat_render.rerender_team()
 
 func set_fumos(fumos:Array[Fumo],team_id:TEAM) -> Array[Fumo]:
 	for fumo in fumos:
@@ -167,8 +172,10 @@ func _play_ability(ability_call:AbilityCall) -> void:
 	ability_call.fumo.call(ability_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
 
 func _play_spellcard(spellcard_call:AbilityCall) -> void:
-	var fumo := spellcard_call.fumo	
+	var fumo := spellcard_call.fumo
 	print(spellcard_call.fumo.name_str + " uses ability: " + spellcard_call.ability)
+	if spellcard_call.fumo.id == 002:
+		summons_negated = true
 	spellcard_call.fumo.call(spellcard_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
 
 func append_abilities(queue:Array[AbilityCall]) -> Array[AbilityCall]:
@@ -190,6 +197,7 @@ func _play_turn() -> void:
 	_print_status()
 	if spellcard_queue.size() > 0:
 		_play_spellcard(spellcard_queue.pop_front())
+		return
 	if ability_queue.size() > 0:
 		_play_ability(ability_queue.pop_front())
 		return
@@ -228,21 +236,48 @@ func _play_turn() -> void:
 func increment_mp(front_ally:Fumo, front_opp:Fumo) -> void:
 	front_ally.mp += ATTACKING_MP_GAIN
 	front_opp.mp += ATTACKING_MP_GAIN
-
 	for ally in allies:
 		ally.mp += BASE_MP_GAIN
 
 	for opp in opponents:
-		opp.mp += BASE_MP_GAIN
+		if opp.id == 003:
+			print_debug(opp.mp, opp.used_spellcard)
+			opp.mp += BASE_MP_GAIN
+			print_debug(opp.mp)
+		else:
+			opp.mp += BASE_MP_GAIN
 
 func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
+	if did_kasen_block(team_id):
+		return
 	fumo.team_id = team_id
 	fumo.koed.connect(_on_fumo_ko)
 	fumo.summoned_fumo.connect(_summon_fumo)
 	team_map[team_id] = _add_to_team(fumo)
 	combat_render.slide_team(team_map[team_id].slice(1),-1)
 	combat_render.render_summon(fumo)
+
+
+	for opp:Fumo in team_map[opposing_team[fumo.team_id]]:
+		if opp.has_method("on_opponent_summon"):
+			var ability_call := AbilityCall.new()
+			ability_call.fumo = opp
+			ability_call.ability = "on_opponent_summon"
+			ability_queue.push_front(ability_call)
+	
 	pass
+
+func did_kasen_block(team_id:TEAM) -> bool:
+	if summons_negated:
+		print("summons_negated")
+		return true
+	for opp:Fumo in get_team(opposing_team[team_id]):
+		print( opp.id == 002, opp.ability_uses > 0)
+		if opp.id == 002 and opp.ability_uses > 0:
+			opp.ability_uses -= 1
+			return true
+			print("blocked by kasen!")
+	return false
 
 func _add_to_team(fumo:Fumo) -> Array[Fumo]:
 	var team:Array[Fumo] = get_team(fumo.team_id)
@@ -306,10 +341,14 @@ func _spellcard_ready(fumo:Fumo) -> void:
 	spell_call.ability = "spellcard"
 	spellcard_queue.append(spell_call)
 	spellcard_queue.sort_custom(priority_sort)
+	print(spellcard_queue)
+	
 	pass
 
 func _print_status() -> void:
 	print("---TURN:" + str(turn_count) + "---")
+	print("SPELL_QUEUE")
+	print(spellcard_queue)
 	print("ABILITY_QUEUE")
 	print(ability_queue)
 	print("ALLIES:")

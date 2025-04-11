@@ -1,8 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://f343gg8fmd45"]
+[gd_scene load_steps=16 format=3 uid="uid://f343gg8fmd45"]
 
 [ext_resource type="Script" uid="uid://2noserkm62p1" path="res://src/fumo/fumo_area.gd" id="1_plwnl"]
 [ext_resource type="Texture2D" uid="uid://c5o1mcmfaicny" path="res://assets/fumo/Aunn.png" id="2_fbnjf"]
+[ext_resource type="Texture2D" uid="uid://lmle0hbanicj" path="res://assets/ui/mana_k.png" id="3_1qdud"]
 [ext_resource type="Texture2D" uid="uid://c0js2jv3113x6" path="res://assets/ui/mana_e.png" id="3_cankm"]
+[ext_resource type="Texture2D" uid="uid://dt4mgulkom8ra" path="res://assets/ui/atk_k.png" id="4_pkxnl"]
 [ext_resource type="Texture2D" uid="uid://cnk0frjg61bp0" path="res://assets/ui/hp.png" id="5_bkxmj"]
 [ext_resource type="Texture2D" uid="uid://cp52p0054w8td" path="res://assets/ui/atk.png" id="6_kyxqk"]
 [ext_resource type="Texture2D" uid="uid://bl3qox5acnsya" path="res://assets/ui/exp0-2.png" id="7_1qdud"]
@@ -170,29 +172,73 @@ texture = ExtResource("2_fbnjf")
 [node name="TriggerLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 136.0
-offset_top = 40.0
-offset_right = 197.0
-offset_bottom = 63.0
+offset_top = 47.0
+offset_right = 334.0
+offset_bottom = 70.0
 text = "On Buy:"
+horizontal_alignment = 1
 
 [node name="AbilityLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 13.0
+offset_left = 60.0
 offset_top = 71.0
 offset_right = 327.0
-offset_bottom = 120.0
-text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+offset_bottom = 146.0
+text = "Lorem Ipsum is simply dummy text of the printing and "
 autowrap_mode = 2
+
+[node name="AbilityLabel2" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 121.0
+offset_right = 334.0
+offset_bottom = 196.0
+text = "------------------------------------------------------------"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="AbilityLabel3" type="Label" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -1.0
+offset_top = 33.0
+offset_right = 332.0
+offset_bottom = 108.0
+text = "------------------------------------------------------------"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="HoverIcon2" type="TextureRect" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 7.0
+offset_top = 154.0
+offset_right = 43.0
+offset_bottom = 189.0
+texture = ExtResource("3_1qdud")
+stretch_mode = 1
+
+[node name="HoverIcon3" type="TextureRect" parent="UI/HoverInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = 70.0
+offset_right = 105.0
+offset_bottom = 151.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_pkxnl")
+stretch_mode = 1
 
 [node name="SpellLabel" type="Label" parent="UI/HoverInfo"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 15.0
+offset_left = 49.0
 offset_top = 141.0
 offset_right = 329.0
 offset_bottom = 190.0
+text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
 autowrap_mode = 2
 
 [node name="MpGrid" type="GridContainer" parent="UI"]
@@ -324,7 +370,6 @@ text = "00"
 
 [node name="ExpBar" type="TextureRect" parent="UI"]
 unique_name_in_owner = true
-z_index = 2
 layout_mode = 0
 offset_left = -74.0
 offset_top = 51.0

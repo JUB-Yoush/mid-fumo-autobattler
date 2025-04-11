@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cveoocgxyrd64"
-path="res://.godot/imported/sword.png-0353738a3c22c26df7b10318fb87e699.ctex"
+uid="uid://c7lq1ncncmy2b"
+path="res://.godot/imported/mana_u.png-dc74f9357b9cdc7015b45f2e36689f6a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/summons/sword.png"
-dest_files=["res://.godot/imported/sword.png-0353738a3c22c26df7b10318fb87e699.ctex"]
+source_file="res://assets/ui/mana_u.png"
+dest_files=["res://.godot/imported/mana_u.png-dc74f9357b9cdc7015b45f2e36689f6a.ctex"]
 
 [params]
 

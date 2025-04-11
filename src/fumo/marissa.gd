@@ -1,7 +1,7 @@
 extends Fumo
 
 func _init() -> void:
-	id = 001
+	id = 010
 	tier = 1
 	name_str = "Marissa"
 	price = 3
@@ -20,4 +20,5 @@ func on_round_start(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 
 func spellcard(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	print("from fumo: " + name_str)
+	area.clear_mp(max_mp)
 

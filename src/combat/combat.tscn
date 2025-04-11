@@ -1,10 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://bcbe6pv56l6dr"]
+[gd_scene load_steps=3 format=3 uid="uid://bcbe6pv56l6dr"]
 
 [ext_resource type="Script" uid="uid://dfyriv8pfx2um" path="res://src/combat/combat.gd" id="1_ekbu2"]
+[ext_resource type="Texture2D" uid="uid://blrs4hhp6i5rh" path="res://assets/bg/battle_bg.png" id="2_djar7"]
 
 [node name="Combat" type="Node"]
 script = ExtResource("1_ekbu2")
-metadata/_edit_horizontal_guides_ = [1078.0]
+
+[node name="BG" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_djar7")
 
 [node name="Allies" type="Node2D" parent="."]
 

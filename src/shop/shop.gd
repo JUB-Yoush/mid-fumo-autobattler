@@ -5,8 +5,8 @@ var fumoMap:Dictionary[Fumo,FumoArea]
 const ITEM_OFFSET:int = 150
 const FUMO_OFFSET:int = 250
 
-const PARTY_POS :Vector2 = Vector2(1200,900)
-const SHOPMO_POS :Vector2 = Vector2(1200,550)
+const PARTY_POS :Vector2 = Vector2(1200,850)
+const SHOPMO_POS :Vector2 = Vector2(1200,500)
 const ITEM_POS :Vector2 = Vector2(1200,250)
 
 @onready var fumo_area_scene :PackedScene= load("res://src/fumo/fumo_area.tscn")
@@ -62,7 +62,7 @@ func _ready() -> void:
 	endBtn.pressed.connect(end_shop_turn)
 
 	gold = 10
-	party = FumoFactory.make_fumos(["marissa"])
+	party = FumoFactory.make_fumos(["kasen"])
 	print(party)
 	render_party()
 	render_shop_items(get_shop_sizes()[1])

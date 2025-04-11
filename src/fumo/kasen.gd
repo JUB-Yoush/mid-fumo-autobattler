@@ -1,23 +1,25 @@
 extends Fumo
 
 func _init() -> void:
-	id = 004
+	id = 002
 	tier = 1
 	name_str = "Kasen"
 	price = 3
-	hp = 2
-	max_mp = 5
-	atk = 2
+	hp = 4
+	max_mp = 13
+	atk = 3
 	mp = 0
-	ability_desc = "Buff mp regen rate by 25% for all allies for <lvl> turns"
-	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
-	trigger_desc = "on round start"
+	ability_uses = 1
+	ability_descriptions = ["prevent one opponent summon","prevent one opponent summon","prevent one opponent summon"]
+	spellcard_descriptions =["prevent all future summons this battle","prevent all future summons this battle","prevent all future summons this battle"]
+	ability_desc = ability_descriptions[level]
+	spell_card_desc = spellcard_descriptions[level]
+	trigger_desc = "on fumo summoned"
 	image = load("res://assets/fumo/Kasen.png")
 
 
-func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
-	var fumo := FumoFactory.make_fumo("marissa")
-	print("summoning a marissa")
-	summoned_fumo.emit(fumo,self.team_id)
-#	await action_completed
+func block_opponent_summon() -> void:
+	# blocks the summon but this is hard_coded
+	pass
+
 

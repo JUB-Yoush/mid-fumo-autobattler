@@ -2,15 +2,12 @@ extends Fumo
 
 func _init() -> void:
 	id = 004
-	name_str = "Sumireko"
+	name_str = "Ghost"
 	price = 3
 	hp = 4
 	max_mp = 6
 	atk = 1
 	mp = 5
-	ability_desc = "Buff mp regen rate by 25% for all allies for <lvl> turns"
-	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
-	trigger_desc = "on feint"
 	image = load("res://assets/fumo/"+name_str+".png")
 
 	ability_descriptions = ["Distribute mp to ally fumo","gain + 2 mp, distribute mp to ally fumo"," gain + 4 mp, distribute mp to ally fumo"]
