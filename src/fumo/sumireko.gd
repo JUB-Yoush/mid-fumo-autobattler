@@ -4,7 +4,7 @@ func _init() -> void:
 	id = 004
 	name_str = "Sumireko"
 	price = 3
-	hp = 40
+	hp = 4
 	max_mp = 6
 	atk = 1
 	mp = 0

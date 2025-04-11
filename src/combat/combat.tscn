@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bcbe6pv56l6dr"]
+[gd_scene load_steps=4 format=3 uid="uid://bcbe6pv56l6dr"]
 
 [ext_resource type="Script" uid="uid://dfyriv8pfx2um" path="res://src/combat/combat.gd" id="1_ekbu2"]
 [ext_resource type="Texture2D" uid="uid://blrs4hhp6i5rh" path="res://assets/bg/battle_bg.png" id="2_djar7"]
+[ext_resource type="Theme" uid="uid://de5d54grv2xqd" path="res://assets/regularfont.tres" id="3_rvvxs"]
 
 [node name="Combat" type="Node"]
 script = ExtResource("1_ekbu2")
@@ -14,3 +15,43 @@ texture = ExtResource("2_djar7")
 [node name="Allies" type="Node2D" parent="."]
 
 [node name="Opponents" type="Node2D" parent="."]
+
+[node name="ResultsScreen" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="ResultsScreen"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1081.0
+
+[node name="ResultLabel" type="Label" parent="ResultsScreen/Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 889.0
+offset_top = 403.0
+offset_right = 1034.0
+offset_bottom = 499.0
+theme = ExtResource("3_rvvxs")
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "WIN"
+horizontal_alignment = 1
+
+[node name="ReturnButton" type="Button" parent="ResultsScreen/Panel"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 728.0
+offset_top = 525.0
+offset_right = 1196.0
+offset_bottom = 621.0
+theme = ExtResource("3_rvvxs")
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "Return to shop
+"

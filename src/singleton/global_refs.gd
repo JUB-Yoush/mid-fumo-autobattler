@@ -18,6 +18,8 @@ var losses :int= 0
 var frozen_items :Array[Item] = []
 var frozen_fumo :Array[Fumo] = []
 
+var prev_stats:Dictionary = {}
+
 var turns :int= 1:
 	set(value):
 		turns = value
@@ -40,8 +42,13 @@ func clone_player_party() -> Array[Fumo]:
 
 func start_battle() -> void:
 	_battle_party = _player_party.duplicate(true)
+	record_shop_stats()
 	print_debug(_battle_party)
 	get_tree().change_scene_to_packed(COMBAT_SCENE)
+
+func record_shop_stats() -> void:
+	for fumo in _player_party:
+		prev_stats[fumo] = [fumo.hp,fumo.atk]
 
 func battle_ended(result:CombatData.RESULTS) -> void:
 	match result:
@@ -50,6 +57,12 @@ func battle_ended(result:CombatData.RESULTS) -> void:
 		CombatData.RESULTS.LOSS:
 			losses += 1
 	turns += 1
+	go_to_shop()
+
+func go_to_shop() -> void:
+	for fumo in _player_party:
+		fumo.hp = prev_stats[fumo][0]
+		fumo.atk = prev_stats[fumo][1]
 	get_tree().change_scene_to_packed(SHOP_SCENE)
 
 func set_current_tier() -> void:
@@ -70,4 +83,3 @@ func set_frozen_shop(fumos:Array[Fumo],items:Array[Item]) -> void:
 
 func get_frozen_shop() -> Array:
 	return[frozen_fumo,frozen_items]
-	

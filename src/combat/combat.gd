@@ -23,6 +23,8 @@ signal animation_over
 
 var fumoMap:Dictionary[Fumo,FumoArea]
 
+var paused:bool = false
+
 var dir_map:Dictionary = {CombatData.TEAM.ALLIES:1}
 
 var animating :bool = false
@@ -178,6 +180,20 @@ func slide_team(team:Array[Fumo],dir:int) -> void:
 	animation_over.emit()
 	rerender_team()
 
+func combat_over(result:CombatData.RESULTS) -> void:
+	%ResultsScreen.visible = true
+	match(result):
+		CombatData.RESULTS.WIN:
+			%ResultLabel.text = "Win!"
+		CombatData.RESULTS.LOSS:
+			%ResultLabel.text = "Lose..."
+		CombatData.RESULTS.DRAW:
+			%ResultLabel.text = "Draw..."
+	await get_tree().create_timer(2).timeout
+	GlobalRefs.battle_ended(result)
+
+
+	pass
 
 func win() -> void:
 	pass
@@ -191,7 +207,7 @@ func lose() -> void:
 #debug
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("advance_turn") and combat_data.current_combat_state == CombatData.COMBAT_STATE.FIGHTING:
-		combat_data._play_turn()
+		battleTimer.paused = !battleTimer.paused
 
 func _print_status() -> void:
 	print("---TURN:" + str(combat_data.turn_count) + "---")

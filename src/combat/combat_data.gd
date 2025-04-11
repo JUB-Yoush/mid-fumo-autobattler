@@ -81,8 +81,11 @@ func _init(player_party:Array[Fumo] = []) -> void:
 	pass
 
 func connect_signals(fumo:Fumo) -> void:
-	#if fumo.get_signal_connection_list("koed")
-	#fumo.disconnect("koed",_on_fumo_ko)
+	var signals :Array[String] = ["koed","changed_order","summoned_fumo", "spellcard_ready"]
+	var callables:Array[Callable] = [_on_fumo_ko,_on_order_change,_summon_fumo,_spellcard_ready]
+	for i in range(signals.size()):
+		if fumo.get_signal_connection_list(signals[i]):
+			fumo.disconnect(signals[i],callables[i])
 	fumo.koed.connect(_on_fumo_ko)
 	fumo.changed_order.connect(_on_order_change)
 	fumo.summoned_fumo.connect(_summon_fumo)
@@ -239,7 +242,6 @@ func _play_turn() -> void:
 			_play_ability(ability_queue.pop_front())
 			return
 	else:
-	
 		var all_turn_abilities := _get_abilities("on_turn_start",allies)
 		var opp_turn_abilities := _get_abilities("on_turn_start",opponents)
 		all_turn_abilities.append_array(opp_turn_abilities)
@@ -365,13 +367,13 @@ func round_over() -> void:
 	current_combat_state = COMBAT_STATE.ENDED
 	if allies.size() > 0 and opponents.size() == 0:
 		print('player won')
-		GlobalRefs.battle_ended(RESULTS.WIN)
-	if opponents.size() > 0 and allies.size() == 0:
+		combat_render.combat_over(RESULTS.WIN)
+	elif opponents.size() > 0 and allies.size() == 0:
 		print('player lost')
-		GlobalRefs.battle_ended(RESULTS.LOSS)
+		combat_render.combat_over(RESULTS.LOSS)
 	else:
 		print('draw')
-		GlobalRefs.battle_ended(RESULTS.DRAW)
+		combat_render.combat_over(RESULTS.DRAW)
 
 func _use_ability(ability:Callable) -> void:
 	ability.call(allies,opponents)

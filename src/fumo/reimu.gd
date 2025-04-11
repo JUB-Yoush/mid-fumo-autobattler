@@ -6,7 +6,7 @@ func _init() -> void:
 	name_str = "Reimu"
 	tier = 2
 	price = 3
-	hp = 30
+	hp = 3
 	max_mp = 5
 	atk = 3
 	mp = 0

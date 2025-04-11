@@ -5,7 +5,7 @@ func _init() -> void:
 	name_str = "Cirno"
 	hp = 2
 	max_mp = 8
-	atk = 21
+	atk = 2
 	mp = 7
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/"+name_str+".png")
