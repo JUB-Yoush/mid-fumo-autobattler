@@ -17,5 +17,4 @@ func _init() -> void:
 
 func on_ko(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 	var fumo := FumoFactory.make_fumo("marissa")
-	print("summoning a marissa")
 	summoned_fumo.emit(fumo,self.team_id)

@@ -52,7 +52,7 @@ enum RESULTS {
 	DRAW
 	}
 
-const ATTACKING_MP_GAIN = 2
+const ATTACKING_MP_GAIN = 1
 const BASE_MP_GAIN = 1
 
 var current_combat_state:COMBAT_STATE = COMBAT_STATE.STARTING
@@ -70,7 +70,7 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["kasen","marissa","dummyko","sumireko"],TEAM.ALLIES)
+		allies = _create_team(["youmu","youmu","youmu","youmu","youmu"],TEAM.ALLIES)
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
 	opponents = _create_team(["dummyko","dummyko","dummyko","chiikawa",],TEAM.OPPONENTS)
@@ -250,9 +250,7 @@ func increment_mp(front_ally:Fumo, front_opp:Fumo) -> void:
 func _summon_fumo(fumo:Fumo,team_id:TEAM) -> void:
 	if did_kasen_block(team_id):
 		return
-	fumo.team_id = team_id
-	fumo.koed.connect(_on_fumo_ko)
-	fumo.summoned_fumo.connect(_summon_fumo)
+	connect_signals(fumo)
 	team_map[team_id] = _add_to_team(fumo)
 	combat_render.slide_team(team_map[team_id].slice(1),-1)
 	combat_render.render_summon(fumo)
@@ -281,7 +279,7 @@ func did_kasen_block(team_id:TEAM) -> bool:
 
 func _add_to_team(fumo:Fumo) -> Array[Fumo]:
 	var team:Array[Fumo] = get_team(fumo.team_id)
-	if team.size() < TEAM_MAX:
+	if team.size() < TEAM_MAX or fumo.is_subtitution:
 		team.push_front(fumo)
 		combat_render.add_fumo_area(fumo)
 	return team

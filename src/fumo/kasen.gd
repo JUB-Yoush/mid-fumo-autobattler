@@ -18,8 +18,5 @@ func _init() -> void:
 	image = load("res://assets/fumo/Kasen.png")
 
 
-func block_opponent_summon() -> void:
-	# blocks the summon but this is hard_coded
-	pass
 
 

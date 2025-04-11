@@ -36,6 +36,8 @@ const FUMOS: Array[String] = [
 	"kasen",
 	"dummyko",
 	"chiikawa",
+	"youmu",
+	"ghost",
 ]
 
 const fumoAreaScene = preload("res://src/fumo/fumo_area.tscn")

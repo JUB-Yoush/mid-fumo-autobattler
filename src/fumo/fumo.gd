@@ -67,7 +67,7 @@ var mp:int = 0:
 		if used_spellcard: 
 			return
 		mp = clamp(value,0,max_mp)
-		if mp == max_mp and not used_spellcard:
+		if mp == max_mp and not used_spellcard and max_mp > 0:
 			spellcard_ready.emit(self)	
 			used_spellcard = true
 		if area:
