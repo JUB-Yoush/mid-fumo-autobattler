@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgdu8ry41c6kn"]
+
+[ext_resource type="Script" uid="uid://26d5jtv7kuf5" path="res://src/menus/win_screen.gd" id="1_bdod1"]
+[ext_resource type="Theme" uid="uid://de5d54grv2xqd" path="res://assets/regularfont.tres" id="1_xbcte"]
+
+[node name="WinScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bdod1")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 1920.0
+offset_bottom = 1081.0
+
+[node name="ResultLabel" type="Label" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 889.0
+offset_top = 403.0
+offset_right = 1034.0
+offset_bottom = 499.0
+theme = ExtResource("1_xbcte")
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "WIN"
+horizontal_alignment = 1
+
+[node name="ReturnButton" type="Button" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 728.0
+offset_top = 525.0
+offset_right = 1196.0
+offset_bottom = 621.0
+theme = ExtResource("1_xbcte")
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "Play Again!
+"

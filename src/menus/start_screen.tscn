@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpsta84oxvkqp"]
+
+[ext_resource type="Theme" uid="uid://de5d54grv2xqd" path="res://assets/regularfont.tres" id="1_3xp7p"]
+[ext_resource type="Script" uid="uid://c7me38votyrh7" path="res://src/menus/start_screen.gd" id="1_t8rsg"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t8rsg")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Panel" type="Panel" parent="Label"]
+offset_right = 1920.0
+offset_bottom = 1081.0
+
+[node name="ResultLabel" type="Label" parent="Label/Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 619.0
+offset_top = 401.0
+offset_right = 1287.0
+offset_bottom = 497.0
+theme = ExtResource("1_3xp7p")
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "mid fumo autobattler"
+horizontal_alignment = 1
+
+[node name="ReturnButton" type="Button" parent="Label/Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 728.0
+offset_top = 525.0
+offset_right = 1196.0
+offset_bottom = 621.0
+theme = ExtResource("1_3xp7p")
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 64
+text = "Play
+"

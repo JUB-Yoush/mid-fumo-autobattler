@@ -20,6 +20,8 @@ var frozen_fumo :Array[Fumo] = []
 
 var prev_stats:Dictionary = {}
 
+var last_result:CombatData.RESULTS
+
 var turns :int= 1:
 	set(value):
 		turns = value
@@ -27,6 +29,15 @@ var turns :int= 1:
 	get:
 		return turns
 
+func start_new_game() -> void:
+	turns = 1
+	wins = 0
+	losses = 0
+	player_lvl = 0
+	frozen_fumo.clear()
+	frozen_items.clear()
+	prev_stats.clear()
+	get_tree().change_scene_to_packed(SHOP_SCENE)
 
 func set_player_party(new_party:Array[Fumo]) -> void:
 	_player_party = new_party
@@ -57,6 +68,7 @@ func battle_ended(result:CombatData.RESULTS) -> void:
 		CombatData.RESULTS.LOSS:
 			losses += 1
 	turns += 1
+	last_result = result
 	go_to_shop()
 
 func go_to_shop() -> void:

@@ -197,12 +197,3 @@ offset_right = 1229.0
 offset_bottom = 118.0
 theme_override_font_sizes/font_size = 64
 text = "END"
-
-[node name="FumoMarker" type="Marker2D" parent="."]
-position = Vector2(1200, 500)
-
-[node name="ItemMarker" type="Marker2D" parent="."]
-position = Vector2(1200, 250)
-
-[node name="PartyMarker" type="Marker2D" parent="."]
-position = Vector2(1200, 900)
