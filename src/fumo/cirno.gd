@@ -4,14 +4,13 @@ func _init() -> void:
 	id = 000
 	name_str = "Cirno"
 	hp = 2
-	max_mp = 8
+	max_mp = 10
 	atk = 2
-	mp = 7
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/"+name_str+".png")
 
-	ability_descriptions = ["Distribute mp to ally fumo","gain + 2 mp, distribute mp to ally fumo"," gain + 4 mp, distribute mp to ally fumo"]
-	spellcard_descriptions = ["+3 mag to all allies","+4 mag to all allies","+ 5 mag to all allies"]
+	ability_descriptions = ["Freezes front-row opponent for 2 turns","Freezes front-row opponent for 3 turns","Freezes front-row opponent for 4 turns",]
+	spellcard_descriptions = ["Freezes 3 random Fumo for 2","Freezes 4 random fumo for 2 turns","Freezes 5 random fumo for 2 turns."]
 	ability_desc = ability_descriptions[level]
 	spell_card_desc = spellcard_descriptions[level]
 

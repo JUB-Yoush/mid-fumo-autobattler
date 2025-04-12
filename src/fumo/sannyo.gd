@@ -2,22 +2,18 @@ extends Fumo
 
 func _init() -> void:
 	id = 008
-	tier = 2
+	tier = 1
 	name_str = "sannyo"
 	hp = 6
 	max_mp = 5
 	atk = 2
 	ability_uses = 1
-	ability_descriptions = ["prevent one opponent summon","prevent one opponent summon","prevent one opponent summon"]
-	spellcard_descriptions =["prevent all future summons this battle","prevent all future summons this battle","prevent all future summons this battle"]
+	ability_descriptions = ["prevent enemy ability from triggering","prevent enemy ability from triggering","prevent enemy ability from triggering"]
+	spellcard_descriptions =["Use a random allies spellcard.","Use a random allies spellcard.","Use a random allies spellcard."]
 	ability_desc = ability_descriptions[level]
 	spell_card_desc = spellcard_descriptions[level]
 	trigger_desc = "on opponent ability"
 	image = load("res://assets/fumo/Sannyo.png")
-
-
-var ability_scale:Array[int] = [5,8,11]
-var spellcard_scale:Array[int] = [3,4,5]
 	
 # func on_after_turn(allies:Array[Fumo], _opponents: Array[Fumo]) -> void:
 # 	if allies.is_empty():

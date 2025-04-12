@@ -33,7 +33,7 @@ const FUMOS: Array[String] = [
 	"shinmyoumaru",
 	"reimu",
 	"sumireko",
-	"sakuya",
+	#"sakuya",
 	"kasen",
 	"chiikawa",
 	"youmu",

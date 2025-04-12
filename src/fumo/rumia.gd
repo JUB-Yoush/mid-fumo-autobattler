@@ -3,16 +3,16 @@ extends Fumo
 func _init() -> void:
 	id = 006
 	name_str = "Rumia"
-	tier = 2
-	hp = 1
-	max_mp = 10
-	atk = 5
+	tier = 1
+	hp = 5
+	max_mp = 8
+	atk = 3
 	mp = 0
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/"+name_str+".png")
 
-	ability_descriptions = ["Distribute mp to ally fumo","gain + 2 mp, distribute mp to ally fumo"," gain + 4 mp, distribute mp to ally fumo"]
-	spellcard_descriptions = ["+3 mag to all allies","+4 mag to all allies","+ 5 mag to all allies"]
+	ability_descriptions = ["Blind the front-line fumo","Blind the front-line fumo","Blind the front-line fumo"]
+	spellcard_descriptions = ["Blind a random fumo","Blind a random fumo","Blind a random fumo"]
 	ability_desc = ability_descriptions[level]
 	spell_card_desc = spellcard_descriptions[level]
 

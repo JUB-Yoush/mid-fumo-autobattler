@@ -4,6 +4,7 @@ class_name Barrier
 func _init() -> void:
 	id = 025
 	name_str = "Barrier"
+	trigger_desc ="on ko"
 	price = 3
 	hp = 1
 	atk = 0

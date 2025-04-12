@@ -4,16 +4,16 @@ func _init() -> void:
 	id = 004
 	tier = 1
 	name_str = "Youmu"
-	hp = 1
+	hp = 3
 	max_mp = 10
-	atk = 20
+	atk = 2
 	mp = 0
 	ability_uses = 1
-	ability_descriptions = ["prevent one opponent summon","prevent one opponent summon","prevent one opponent summon"]
-	spellcard_descriptions =["prevent all future summons this battle","prevent all future summons this battle","prevent all future summons this battle"]
+	ability_descriptions = ["Summon a 1 hp 1 atk Spirit.","Summon a 1 hp 1 atk Spirit.","Summon a 1 hp 1 atk Spirit."]
+	spellcard_descriptions = ["Summon another 1 hp 1 atk Spirit.","Summon another 1 hp 1 atk Spirit.","Summon another 1 hp 1 atk Spirit."]
 	ability_desc = ability_descriptions[level]
 	spell_card_desc = spellcard_descriptions[level]
-	trigger_desc = "on fumo summoned"
+	trigger_desc = "on round start"
 	image = load("res://assets/fumo/Youmu.png")
 
 

@@ -6,12 +6,12 @@ func _init() -> void:
 	name_str = "Yumeko"
 	tier = 2
 	price = 3
-	hp = 30
+	hp = 3
 	max_mp = 5
 	atk = 3
 	mp = 0
-	ability_desc = "Buff mp regen rate by 25% for all allies for <lvl> turns"
-	spell_card_desc = "Lorem Ipsum? Who is she? Why can't I reach her?"
+	ability_desc = "Summon a 1 hp 3 atk sword"
+	spell_card_desc = "Summon another 1hp 3 atk sword"
 	trigger_desc = "on round start"
 	image = load("res://assets/fumo/Yumeko.png")
 

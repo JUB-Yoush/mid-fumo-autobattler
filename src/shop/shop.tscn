@@ -107,6 +107,7 @@ scale = Vector2(5.289, 5)
 color = Color(0, 0, 0, 0.337255)
 
 [node name="BuyLabel" type="Label" parent="BuyArea/ColorRect"]
+layout_mode = 0
 offset_left = -53.1291
 offset_top = 0.799995
 offset_right = 91.8709
@@ -141,6 +142,7 @@ offset_bottom = 23.0
 text = "Sell"
 
 [node name="ResultLabel2" type="Label" parent="SellArea/ColorRect"]
+layout_mode = 0
 offset_left = -53.1291
 offset_top = 1.80001
 offset_right = 91.8709
@@ -168,6 +170,7 @@ scale = Vector2(5.289, 5)
 color = Color(0, 0, 0, 0.337255)
 
 [node name="ResultLabel3" type="Label" parent="FreezeArea/ColorRect"]
+layout_mode = 0
 offset_left = -58.8013
 offset_top = 2.8
 offset_right = 86.1987
@@ -197,6 +200,3 @@ offset_right = 1229.0
 offset_bottom = 118.0
 theme_override_font_sizes/font_size = 64
 text = "END"
-
-[node name="bgm" type="AudioStreamPlayer" parent="."]
-unique_name_in_owner = true

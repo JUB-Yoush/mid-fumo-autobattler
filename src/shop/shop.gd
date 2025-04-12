@@ -244,7 +244,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_released("click") and overlapping_area != null:
 		# try to buy
 		if selected_area.is_in_group("item") and selected_area.get_overlapping_areas().is_empty() == false and selected_area.get_overlapping_areas()[0].is_in_group("party"):
-			if gold <= selected_area.item.price: 
+			if gold < selected_area.item.price: 
 				print("too poor!")
 			else:
 				purchase(selected_area,selected_area.get_overlapping_areas()[0])

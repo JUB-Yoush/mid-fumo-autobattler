@@ -115,7 +115,7 @@ func update_status_time(remaining_status_time:int) -> void:
 		%StatusLabel.text = ""
 		return
 	%StatusLabel.text = str(remaining_status_time)
-	
+
 
 func toggle_blue() -> void:
 	is_blue = !is_blue

@@ -70,11 +70,12 @@ func _init(player_party:Array[Fumo] = []) -> void:
 
 	if player_party.is_empty():
 		#allies = _rng_team(TEAM.ALLIES)
-		allies = _create_team(["kasen"],TEAM.ALLIES)
+		#allies = _create_team(["youmu","marissa"],TEAM.ALLIES)
+		allies = []
 	else:
 		allies = set_fumos(player_party,TEAM.ALLIES)
-	opponents = _create_team(["dummyko","dummyko","chiikawa"],TEAM.OPPONENTS)
-	#opponents = set_fumos(TeamGenerator.generate_team(TEAM.OPPONENTS),TEAM.OPPONENTS)
+	#opponents = _create_team(["cirno","cirno","chiikawa"],TEAM.OPPONENTS)
+	opponents = set_fumos(TeamGenerator.generate_team(TEAM.OPPONENTS),TEAM.OPPONENTS)
 
 	_generate_seed()
 	_start_round()
@@ -199,6 +200,7 @@ func _get_abilities(ability_query:StringName,team:Array[Fumo]) -> Array:
 func _play_ability(ability_call:AbilityCall) -> void:
 	var fumo := ability_call.fumo	
 	print(ability_call.fumo.name_str + " uses ability: " + ability_call.ability)
+	combat_render.render_ability(fumo)
 	ability_call.fumo.call(ability_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
 
 func _play_spellcard(spellcard_call:AbilityCall) -> void:
@@ -207,6 +209,7 @@ func _play_spellcard(spellcard_call:AbilityCall) -> void:
 	if spellcard_call.fumo.id == 002 and fumo.name_str == "Kasen":
 		summons_negated = true
 		return
+	combat_render.render_spellcard(fumo)
 	spellcard_call.fumo.call(spellcard_call.ability,get_team(fumo.team_id),get_team(opposing_team[fumo.team_id]))
 
 func append_abilities(queue:Array[AbilityCall]) -> Array[AbilityCall]:
@@ -263,7 +266,7 @@ func _play_turn() -> void:
 		all_turn_abilities.append_array(opp_turn_abilities)
 		all_turn_abilities.sort_custom(priority_sort)
 		append_abilities(all_turn_abilities)
-
+		combat_render.clear_ability()
 		if (allies.size() == 0 or opponents.size() == 0):
 			round_over()
 			
@@ -288,6 +291,12 @@ func _play_turn() -> void:
 				front_opp = _swap_fumo(opponents[0])
 
 		turn_count += 1
+
+		var all_end_abilities := _get_abilities("on_turn_end",allies)
+		var opp_end_abilities := _get_abilities("on_turn_end",opponents)
+		all_end_abilities.append_array(opp_end_abilities)
+		all_end_abilities.sort_custom(priority_sort)
+		append_abilities(all_turn_abilities)
 		print("Turn Over")
 
 func increment_mp(front_ally:Fumo, front_opp:Fumo) -> void:

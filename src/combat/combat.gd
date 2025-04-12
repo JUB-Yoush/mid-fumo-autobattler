@@ -181,6 +181,18 @@ func slide_team(team:Array[Fumo],dir:int) -> void:
 	animation_over.emit()
 	rerender_team()
 
+func render_ability(fumo:Fumo) -> void:
+	%AbilityTextureRect.texture = fumo.image
+	%AbilityLabel.text = "%s uses ability %s" % [fumo.name_str,fumo.trigger_desc]
+	
+func render_spellcard(fumo:Fumo) -> void:
+	%AbilityTextureRect.texture = fumo.image
+	%AbilityLabel.text = "%s triggers their spellcard!" % fumo.name_str
+	
+func clear_ability() -> void:
+	%AbilityTextureRect.texture = null
+	%AbilityLabel.text = ""
+
 func combat_over(result:CombatData.RESULTS) -> void:
 	%ResultsScreen.visible = true
 	match(result):

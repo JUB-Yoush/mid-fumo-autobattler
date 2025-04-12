@@ -75,6 +75,7 @@ func go_to_shop() -> void:
 	for fumo in _player_party:
 		fumo.hp = prev_stats[fumo][0]
 		fumo.atk = prev_stats[fumo][1]
+		fumo.mp = 0
 	get_tree().change_scene_to_packed(SHOP_SCENE)
 
 func set_current_tier() -> void:
